@@ -1,0 +1,41 @@
+{
+  "pins" : [
+    {
+      "identity" : "filesugar",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/eonist/FileSugar.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "4e26b7124dce0d873678ee61546bce04f246353a"
+      }
+    },
+    {
+      "identity" : "jsonsugar",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/eonist/JSONSugar.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "a8631c693c43165c22f67afe985992ca0652d7fe"
+      }
+    },
+    {
+      "identity" : "logger",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sentryco/Logger.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "43b17e4f686c7ba44ceeacc4a92529571cdb246b"
+      }
+    },
+    {
+      "identity" : "mockgen",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sentryco/MockGen",
+      "state" : {
+        "branch" : "main",
+        "revision" : "9ad0cd550b6ab65dab412df6c089d07caf3dd43c"
+      }
+    }
+  ],
+  "version" : 2
+}
