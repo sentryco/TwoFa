@@ -7,6 +7,7 @@
 ### Description:
 - It helps keep your online accounts secure by generating unique one-time passwords, which you use in combination with your other passwords to log into supporting websites.
 - TOTP stands for Time-Based One-Time Password. This is a standardized method for generating a regularly-changing password that is based on a shared secret, ensuring that each code is unique.
+- HOTP stands for HMAC-Based One-Time Password. Unlike TOTP, HOTP passwords are based on a counter mechanism and do not expire after a short period of time, making them suitable for situations where time-sync might not be possible.
 
 ### Features:
 - Easy setup via QR code, "otpauth://" URL, or manual entry
