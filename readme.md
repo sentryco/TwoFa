@@ -4,10 +4,9 @@
 
 > 2FA framework (One-time-password) (TOTP / HTOP)
 
-- TOTP stands for Time-Based One-Time Password. This is a standardized method for generating a regularly-changing password that is based on a shared secret, ensuring that each code is unique.
-
 ### Description:
-It helps keep your online accounts secure by generating unique one-time passwords, which you use in combination with your other passwords to log into supporting websites.
+- It helps keep your online accounts secure by generating unique one-time passwords, which you use in combination with your other passwords to log into supporting websites.
+- TOTP stands for Time-Based One-Time Password. This is a standardized method for generating a regularly-changing password that is based on a shared secret, ensuring that each code is unique.
 
 ### Features:
 - Easy setup via QR code, "otpauth://" URL, or manual entry
