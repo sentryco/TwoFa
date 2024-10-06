@@ -1,12 +1,17 @@
 import Foundation
 /**
  * This class is used to build the absolute URL
- * - Description: This class is responsible for constructing the absolute URL used for OTP (One-Time Password) generation. It creates URL components and query items based on the OTP configuration and generator type (TOTP or HOTP). The resulting URL is compliant with the otpauth URL scheme used for OTP transfer.
+ * - Description: This class is responsible for constructing the absolute URL used for OTP (One-Time Password) generation.
+ *                It creates URL components and query items based on the OTP configuration and generator type (TOTP or HOTP).
+ *                The resulting URL is compliant with the otpauth URL scheme used for OTP transfer.
  */
 internal class AbsoluteURLBuilder {
    /**
     * Create a URL components object
-    * - Description: This method creates a URLComponents object with the otpauth scheme and sets the host to the generator type string value ("totp" or "htop"). The path of the URL is set to "/". This URLComponents object is used as the base for constructing the absolute URL for OTP generation.
+    * - Description: This method creates a URLComponents object with the otpauth scheme
+    *                and sets the host to the generator type string value ("totp" or "htop").
+    *                The path of the URL is set to "/".
+    *                This URLComponents object is used as the base for constructing the absolute URL for OTP generation.
     */
    static func createURLComponents(generatorType: GeneratorType) -> URLComponents {
       var components: URLComponents = .init() // Create a URL components object
@@ -17,7 +22,13 @@ internal class AbsoluteURLBuilder {
    }
    /**
     * Create an array of URL query items
-    * - Description: This method constructs an array of URLQueryItem objects, each representing a query parameter for the OTP URL. The query parameters include the secret key encoded in base64, the hashing algorithm, and the number of digits in the OTP. These parameters are essential for the OTP generation process and are used to configure the OTP generator according to the specified settings.
+    * - Description: This method constructs an array of URLQueryItem objects,
+    *                each representing a query parameter for the OTP URL.
+    *                The query parameters include the secret key encoded in base64,
+    *                the hashing algorithm, and the number of digits in the OTP.
+    *                These parameters are essential for the OTP generation process
+    *                and are used to configure the OTP generator according to the
+    *                specified settings.
     */
    static func createQueryItems(otp: OTP) -> [URLQueryItem] {
       [ // Create an array of URL query items
@@ -40,7 +51,10 @@ internal class AbsoluteURLBuilder {
    }
    /**
     * Add generator type specific items to the query items
-    * - Description: This function adds generator type specific items to the query items. Depending on the generator type (HOTP or TOTP), it appends the counter or period to the query items respectively. This is crucial for the OTP generation process as it determines the moving factor in the OTP algorithm.
+    * - Description: This function adds generator type specific items to the query items.
+    *                Depending on the generator type (HOTP or TOTP), it appends the counter
+    *                or period to the query items respectively. This is crucial for the OTP
+    *                generation process as it determines the moving factor in the OTP algorithm.
     */
    static func addGeneratorTypeToQueryItems(queryItems: [URLQueryItem], otp: OTP, generatorType: GeneratorType) -> [URLQueryItem] {
       var queryItems = queryItems
@@ -62,7 +76,10 @@ internal class AbsoluteURLBuilder {
    }
    /**
     * Add issuer and name to the path
-    * - Description: This function adds the issuer and name to the URL path. If the issuer exists, it appends both the issuer and name to the URL path and adds the issuer to the query items. If the issuer does not exist, it only appends the name to the URL path.
+    * - Description: This function adds the issuer and name to the URL path.
+    *                If the issuer exists, it appends both the issuer and name to
+    *                the URL path and adds the issuer to the query items. If the
+    *                issuer does not exist, it only appends the name to the URL path.
     */
    static func addIssuerAndNameToPath(components: URLComponents, issuer: String?, name: String?, queryItems: inout [URLQueryItem]) -> String {
       var path = components.path
@@ -80,7 +97,9 @@ internal class AbsoluteURLBuilder {
    }
    /**
     * Add image URL to query items
-    * - Description: This function adds the image URL to the query items if it exists. The image URL is used to provide a visual identifier for the OTP account, which can be displayed in the user interface.
+    * - Description: This function adds the image URL to the query items if it exists.
+    *                The image URL is used to provide a visual identifier for the OTP
+    *                account, which can be displayed in the user interface.
     */
    static func addImageURLToQueryItems(queryItems: [URLQueryItem], imageURL: String?) -> [URLQueryItem] {
       var queryItems = queryItems
