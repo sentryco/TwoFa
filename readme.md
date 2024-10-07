@@ -2,7 +2,7 @@
 
 # TwoFa ⏳
 
-> 2FA framework (One-time-password) (TOTP / HTOP)
+> 2FA framework (One-time-password) (TOTP / HOTP)
 
 ### Description:
 - It helps keep your online accounts secure by generating unique one-time passwords, which you use in combination with your other passwords to log into supporting websites.
