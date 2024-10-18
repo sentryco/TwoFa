@@ -1,10 +1,13 @@
 import Foundation
-// fixme: ⚠️️ add unit tests for these?
+// fixme: ⚠️️ Add unit tests for these?
 // This utility class provides methods for processing URL query items related to OTP (One-Time Password) account setup.
 class QueryUtil {
    /**
     * Process the query item
-    * - Description: This method processes a given query item by determining its key and delegating the appropriate processing function to handle its value. It updates the passed-in references with the processed values necessary for OTP account setup.
+    * - Description: This method processes a given query item by determining
+    *                it's key and delegating the appropriate processing function
+    *                to handle its value. It updates the passed-in references
+    *                with the processed values necessary for OTP account setup.
     * - Parameters:
     *   - queryItem: The query item to process
     *   - secret: The secret to process
@@ -39,7 +42,13 @@ class QueryUtil {
 extension QueryUtil {
    /**
     * Process the secret
-    * - Description: This method decodes the secret from the query item and converts it from a base64 encoded string to raw `Data`. The secret is a crucial part of the OTP generation process, as it is used in conjunction with the chosen algorithm to create a unique OTP. If the secret cannot be decoded or is missing, the method does not alter the passed `secret` parameter.
+    * - Description: This method decodes the secret from the query item and
+    *                converts it from a base64 encoded string to raw `Data`.
+    *                The secret is a crucial part of the OTP generation process,
+    *                as it is used in conjunction with the chosen algorithm to
+    *                create a unique OTP. If the secret cannot be decoded or is
+    *                missing, the method does not alter the passed `secret`
+    *                parameter.
     * - Parameters:
     *   - queryItem: The query item to process
     *   - secret: The secret to process
@@ -52,7 +61,12 @@ extension QueryUtil {
    }
    /**
     * Process the algorithm
-    * - Description: This method processes the algorithm from the query item. It checks the value of the query item and sets the algorithm accordingly. If the value is "SHA256", it sets the algorithm to SHA256. If the value is "SHA512", it sets the algorithm to SHA512. If the value is neither, it does not alter the passed `algo` parameter.
+    * - Description: This method processes the algorithm from the query item.
+    *                It checks the value of the query item and sets the
+    *                algorithm accordingly. If the value is "SHA256", it sets
+    *                the algorithm to SHA256. If the value is "SHA512", it sets
+    *                the algorithm to SHA512. If the value is neither, it does
+    *                not alter the passed `algo` parameter.
     * - Parameters:
     *   - queryItem: The query item to process
     *   - algo: The algorithm to process
@@ -67,7 +81,13 @@ extension QueryUtil {
 
    /**
     * Process the digits
-    * - Description: This method processes the digits from the query item. It checks the value of the query item and sets the digits accordingly. If the value is not within the range of 6 to 9, an error is thrown. If the value is within the range, it sets the digits to the converted integer value. If the value is neither, it does not alter the passed `digits` parameter.
+    * - Description: This method processes the digits from the query item. It
+    *                checks the value of the query item and sets the digits
+    *                accordingly. If the value is not within the range of 6 to
+    *                9, an error is thrown. If the value is within the range,
+    *                it sets the digits to the converted integer value. If the
+    *                value is neither, it does not alter the passed `digits`
+    *                parameter.
     * - Parameters:
     *   - queryItem: The query item to process
     *   - digits: The digits to process
@@ -82,7 +102,11 @@ extension QueryUtil {
 
    /**
     * Process the image
-    * - Description: This method processes the image from the query item. It checks the value of the query item and sets the image URL string accordingly. If the value is not a valid URL, an error is thrown. If the value is a valid URL, it sets the image URL string to the absolute string of the image URL.
+    * - Description: This method processes the image from the query item. It
+    *                checks the value of the query item and sets the image URL
+    *                string accordingly. If the value is not a valid URL, an
+    *                error is thrown. If the value is a valid URL, it sets the
+    *                image URL string to the absolute string of the image URL.
     * - Parameters:
     *   - queryItem: The query item to process
     *   - imageURLString: The image URL string to process
@@ -96,7 +120,13 @@ extension QueryUtil {
    }
    /**
     * Process the counter
-    * - Description: This method processes the counter from the query item. It checks the value of the query item and sets the generator type to HOTP with the counter value accordingly. If the value is not a valid integer, the method returns without altering the generator type. If the value is a valid integer, it sets the generator type to HOTP with the provided counter value.
+    * - Description: This method processes the counter from the query item. It
+    *                checks the value of the query item and sets the generator
+    *                type to HOTP with the counter value accordingly. If the
+    *                value is not a valid integer, the method returns without
+    *                altering the generator type. If the value is a valid
+    *                integer, it sets the generator type to HOTP with the
+    *                provided counter value.
     * - Parameters:
     *   - queryItem: The query item to process
     *   - generatorType: The generator type to process
@@ -107,7 +137,13 @@ extension QueryUtil {
    }
    /**
     * Process the period
-    * - Description: This method processes the period from the query item. It checks the value of the query item and sets the period accordingly. The period represents the length of time for which a Time-based One-Time Password (TOTP) is valid. If the value is not a valid double or is less than 1, an error is thrown. If the value is valid, it sets the period to the converted double value.
+    * - Description: This method processes the period from the query item. It
+    *                checks the value of the query item and sets the period
+    *                accordingly. The period represents the length of time for
+    *                which a Time-based One-Time Password (TOTP) is valid. If
+    *                the value is not a valid double or is less than 1, an error
+    *                is thrown. If the value is valid, it sets the period to
+    *                the converted double value.
     * - Parameters:
     *   - queryItem: The query item to process
     *   - period: The period to process

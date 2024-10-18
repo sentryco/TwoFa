@@ -1,39 +1,59 @@
 import Foundation
 /**
  * Parsing
- * - Description: This extension provides methods for parsing OTPAccount data from URL query items and host. It includes a QueryResult struct for storing the parsed data and a method for creating a QueryResult instance from the provided query items and host.
+ * - Description: This extension provides methods for parsing OTPAccount data
+ *                from URL query items and host. It includes a QueryResult struct
+ *                for storing the parsed data and a method for creating a
+ *                QueryResult instance from the provided query items and host.
  */
 extension OTPAccount {
    /**
     * Internal data object
-    * - Description: This is an internal struct used to store the parsed data from the URL query items and host. It includes the issuer, OTP, generator type, and an optional image URL string.
+    * - Description: This is an internal struct used to store the parsed data
+    *                from the URL query items and host. It includes the issuer,
+    *                OTP, generator type, and an optional image URL string.
     * - Fixme: ⚠️️ Move to own file?
     */
    internal struct QueryResult {
       /**
        * The issuer of the account for which the one-time password is being generated (optional)
-       * - Description: This field specifies the organization or service that provides the OTP account. It is used to differentiate between multiple accounts, especially when the same user has OTPs for different services.
+       * - Description: This field specifies the organization or service that
+       *                provides the OTP account. It is used to differentiate
+       *                between multiple accounts, especially when the same user
+       *                has OTPs for different services.
        */
       let issuer: String?
       /**
        * The secret key used to generate the one-time password
-       * - Description: This is the secret key used to generate the one-time password. It is a crucial part of the OTP generation process, as it is used in conjunction with the chosen algorithm to create a unique OTP.
+       * - Description: This is the secret key used to generate the one-time
+       *                password. It is a crucial part of the OTP generation
+       *                process, as it is used in conjunction with the chosen
+       *                algorithm to create a unique OTP.
        */
       let otp: OTP
       /**
        * The type of one-time password generator to use
-       * The generator type determines the method of generating the one-time password, either based on a time interval (TOTP) or a counter value (HOTP).
+       * - Description: The generator type determines the method of generating
+       *                the one-time password, either based on a time interval
+       *                (TOTP) or a counter value (HOTP).
        */
       let generatorType: GeneratorType
       /**
        * The URL of an image associated with the account (optional)
-       * - Description: This is a URL string that points to an image associated with the OTP account. This could be a logo or any other image that helps identify the account. This field is optional and may not be present for all accounts.
+       * - Description: This is a URL string that points to an image associated
+       *                with the OTP account. This could be a logo or any other
+       *                image that helps identify the account. This field is
+       *                optional and may not be present for all accounts.
        */
       let imageURLString: String?
    }
    /**
     * Creates a `QueryResult` from different `URLQueryItem's` and host
-    * - Description: This method creates a QueryResult instance from the provided URL query items and host. The QueryResult instance contains the parsed data necessary for OTP account setup, including the issuer, OTP, generator type, and an optional image URL string.
+    * - Description: This method creates a QueryResult instance from the
+    *                provided URL query items and host. The QueryResult instance
+    *                contains the parsed data necessary for OTP account setup,
+    *                including the issuer, OTP, generator type, and an optional
+    *                image URL string.
     * - Fixme: ⚠️️ maybe use the builder design pattern?
     * - Parameters:
     *   - queryItems: query items from URL

@@ -5,14 +5,23 @@ import Logger
 import MockGen
 /**
  * Used for Unit-testing
- * - Description: This class provides methods to generate random OTP (One-Time Password) account data for testing purposes. It includes functionality to create random OTP account URLs and OTPAccount instances with various properties such as name, issuer, and secret. This is useful for unit tests that require OTP data but do not need to rely on fixed test data.
+ * - Description: This class provides methods to generate random OTP 
+ *                (One-Time Password) account data for testing purposes. It 
+ *                includes functionality to create random OTP account URLs and 
+ *                OTPAccount instances with various properties such as name, 
+ *                issuer, and secret. This is useful for unit tests that 
+ *                require OTP data but do not need to rely on fixed test data.
  * - Fixme: ⚠️️⚠️️⚠️️ move to testing scope?, move it out? do we use it anywhere else?  👈 yes move it to test scope, make sure other tests outside this framework run after etc
  * - Remark: I guess we keep it here because other libs use it for their tests?
  */
 public class RandomOTP {
    /**
     * Random otp url str
-    * - Description: This method generates a random OTP (One-Time Password) account URL string for testing purposes. The URL string is constructed with a random first name, brand name, and OTP account details. If any of these random values cannot be generated, the method returns nil.
+    * - Description: This method generates a random OTP (One-Time Password)
+    *                account URL string for testing purposes. The URL string is
+    *                constructed with a random first name, brand name, and OTP
+    *                account details. If any of these random values cannot be
+    *                generated, the method returns nil.
     * ## Examples:
     * let randomOTP: String = RandomOTP.randomOTPAccountURLStr ?? "otpauth://hotp/test?secret=6UAOpz+x3dsNrQ==&algorithm=SHA512&digits=6&counter=1"
     */
@@ -30,7 +39,12 @@ public class RandomOTP {
    }
    /**
     * OTP-mock-generator
-    * - Description: This method generates a random OTPAccount instance for testing purposes. It takes a name and issuer as parameters and creates an OTPAccount with a random secret, period, algorithm, digit count, and generator type. The method returns an optional OTPAccount, which is nil if any part of the OTPAccount creation fails.
+    * - Description: This method generates a random OTPAccount instance for
+    *                testing purposes. It takes a name and issuer as parameters
+    *                and creates an OTPAccount with a random secret, period,
+    *                algorithm, digit count, and generator type. The method
+    *                returns an optional OTPAccount, which is nil if any part of
+    *                the OTPAccount creation fails.
     * - Fixme: ⚠️️ Add img-url to the method
     * - Parameters:
     *   - name: email or name
@@ -75,12 +89,19 @@ public class RandomOTP {
 }
 /**
  * OTPHelpers
- * Provides utility functions for generating random OTP (One-Time Password) accounts and secret keys for testing purposes.
+ * - Description: Provides utility functions for generating random OTP
+ *                (One-Time Password) accounts and secret keys for testing
+ *                purposes.
  */
 extension RandomOTP {
    /**
     * Generate a random secret key with a length between `min` and `max` bytes
-    * - Description: This function generates a random secret key within the specified byte range. The secret key is essential for creating secure one-time passwords (OTPs) used in two-factor authentication systems. The randomness ensures that each secret key is unique and unpredictable, enhancing the security of the OTP mechanism.
+    * - Description: This function generates a random secret key within the
+    *                specified byte range. The secret key is essential for
+    *                creating secure one-time passwords (OTPs) used in two-factor
+    *                authentication systems. The randomness ensures that each
+    *                secret key is unique and unpredictable, enhancing the
+    *                security of the OTP mechanism.
     * - Parameters:
     *   - min: The minimum length of the secret key in bytes.
     *   - max: The maximum length of the secret key in bytes.
@@ -93,8 +114,15 @@ extension RandomOTP {
    /**
     * This function generates a random one-time password secret key with a length of 256 bits (32 bytes).
     * - Abstract: The secret key is used to generate one-time passwords for TOTP and HOTP authentication.
-    * - Description: This function generates a random secret key of a specified length. The secret key is used in the generation of one-time passwords for TOTP and HOTP authentication. The function returns a `Data` object containing the generated secret key, or `nil` if the key cannot be generated.
-    * - Note: This can be done with `SecRandomCopyBytes` as well. but the idea here is to use base64 because it works with the otp secret. SecRandomCopyBytes might also work. but that has not been tested yet. worth a test
+    * - Description: This function generates a random secret key of a specified
+    *                length. The secret key is used in the generation of one-time
+    *                passwords for TOTP and HOTP authentication. The function
+    *                returns a `Data` object containing the generated secret key,
+    *                or `nil` if the key cannot be generated.
+    * - Note: This can be done with `SecRandomCopyBytes` as well. but the idea
+    *         here is to use base64 because it works with the otp secret.
+    *         SecRandomCopyBytes might also work. but that has not been tested
+    *         yet. worth a test
     * - Fixme: ⚠️️ this is the same as in mockgen so move it there?
     * - Parameters:
     *   - length: The length of the secret key in bytes.

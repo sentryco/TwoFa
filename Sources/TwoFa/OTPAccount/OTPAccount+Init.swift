@@ -1,12 +1,25 @@
 import Foundation
 /**
  * Init
- * - Description: This extension provides initializers for the OTPAccount struct. It includes initializers that take a URL string or a URL object as input. These initializers parse the provided URL, which should be in the format of an otpauth URL, to extract the necessary information to set up an OTP account. This includes the account name, issuer, secret, algorithm, digits, and other optional parameters. An error is thrown if the provided URL is not a valid otpauth URL.
+ * - Description: This extension provides initializers for the OTPAccount
+ *                struct. It includes initializers that take a URL string or a
+ *                URL object as input. These initializers parse the provided
+ *                URL, which should be in the format of an otpauth URL, to
+ *                extract the necessary information to set up an OTP account.
+ *                This includes the account name, issuer, secret, algorithm,
+ *                digits, and other optional parameters. An error is thrown if
+ *                the provided URL is not a valid otpauth URL.
  */
 extension OTPAccount {
    /**
     * init via string
-    * - Description: This initializer creates an instance of OTPAccount using a URL string. The URL string should be in the format of an otpauth URL, which contains all the necessary information to set up an OTP account, such as the account name, issuer, secret, algorithm, digits, and other optional parameters. An error is thrown if the URL string is not a valid otpauth URL.
+    * - Description: This initializer creates an instance of OTPAccount using
+    *                a URL string. The URL string should be in the format of an
+    *                otpauth URL, which contains all the necessary information
+    *                to set up an OTP account, such as the account name, issuer,
+    *                secret, algorithm, digits, and other optional parameters.
+    *                An error is thrown if the URL string is not a valid otpauth
+    *                URL.
     * - Parameter urlStr: The URL string to initialize the OTPAccount from.
     */
    public init(urlStr: String) throws {
@@ -18,7 +31,12 @@ extension OTPAccount {
    }
    /**
     * Init with URL
-    * - Description: This initializer creates an instance of OTPAccount using a URL. The URL should be in the format of an otpauth URL, which contains all the necessary information to set up an OTP account, such as the account name, issuer, secret, algorithm, digits, and other optional parameters. An error is thrown if the URL is not a valid otpauth URL.
+    * - Description: This initializer creates an instance of OTPAccount using
+    *                a URL. The URL should be in the format of an otpauth URL,
+    *                which contains all the necessary information to set up an
+    *                OTP account, such as the account name, issuer, secret,
+    *                algorithm, digits, and other optional parameters. An error
+    *                is thrown if the URL is not a valid otpauth URL.
     * - Fixme: ⚠️️ More info here: https://github.com/calleluks/Tofu/blob/master/Tofu/Account.swift
     * ## Examples
     * OTPAccount(url: URL("otpauth://totp/test?secret=GEZDGNBV"))

@@ -3,8 +3,14 @@ import CryptoKit
 import Foundation
 /**
  * An object for generating time-based & HMAC-based one-time passwords
- * - Description: The `Generator` struct is responsible for creating one-time passwords (OTPs) that are either time-based (TOTP) or HMAC-based (HOTP). It provides a secure way to generate OTPs that are used for two-factor authentication, ensuring that each password is unique and valid only for a short period or single use.
- * - Fixme: ⚠️️ Has more modern code: https://github.com/lachlanbell/SwiftOTP/blob/master/SwiftOTP/Generator.swift
+ * - Description: The `Generator` struct is responsible for creating one-time
+ *                passwords (OTPs) that are either time-based (TOTP) or
+ *                HMAC-based (HOTP). It provides a secure way to generate
+ *                OTPs that are used for two-factor authentication, ensuring
+ *                that each password is unique and valid only for a short
+ *                period or single use.
+ * - Fixme: ⚠️️ Has more modern code:
+ *          https://github.com/lachlanbell/SwiftOTP/blob/master/SwiftOTP/Generator.swift
  */
 public struct Generator {}
 /**
@@ -13,8 +19,15 @@ public struct Generator {}
 extension Generator {
    /**
     * Generate "HashFunction"
-    * - Description: Generates a one-time password using the provided hash function. This method computes the HMAC of the counter value using the secret key from the OTP instance and then applies a dynamic truncation function to extract a portion of the HMAC result. The extracted value is then reduced to the desired number of digits to produce the final one-time password.
-    * - Note: Has alternate hash code: https://github.com/lachlanbell/SwiftOTP/blob/master/SwiftOTP/Generator.swift
+    * - Description: Generates a one-time password using the provided hash
+    *                function. This method computes the HMAC of the counter
+    *                value using the secret key from the OTP instance and then
+    *                applies a dynamic truncation function to extract a portion
+    *                of the HMAC result. The extracted value is then reduced
+    *                to the desired number of digits to produce the final
+    *                one-time password.
+    * - Note: Has alternate hash code:
+    *         https://github.com/lachlanbell/SwiftOTP/blob/master/SwiftOTP/Generator.swift
     * - Parameters:
     *   - otp: `One-Time-Password` instance
     *   - counter: Counter value (progressed period)
@@ -54,7 +67,16 @@ extension Generator {
 extension Generator {
    /**
     * hmac
-    * - Description: This method generates an HMAC (Hash-based Message Authentication Code) using the secret key from the OTP instance and the provided counter value. The HMAC is a specific type of message authentication code (MAC) involving a cryptographic hash function and a secret cryptographic key. It is used as a means of verifying both the data integrity and the authenticity of a message. The method selects the appropriate HMAC algorithm based on the algorithm specified in the OTP instance (SHA1, SHA256, or SHA512).
+    * - Description: This method generates an HMAC (Hash-based Message 
+    *                Authentication Code) using the secret key from the OTP 
+    *                instance and the provided counter value. The HMAC is a 
+    *                specific type of message authentication code (MAC) 
+    *                involving a cryptographic hash function and a secret 
+    *                cryptographic key. It is used as a means of verifying 
+    *                both the data integrity and the authenticity of a message. 
+    *                The method selects the appropriate HMAC algorithm based on 
+    *                the algorithm specified in the OTP instance (SHA1, SHA256, 
+    *                or SHA512).
     * - Note: More hmac code: https://github.com/mattrubin/OneTimePassword/blob/develop/Sources/Crypto.swift
     * - Parameters:
     *   - otp: The `OneTimePassword` instance

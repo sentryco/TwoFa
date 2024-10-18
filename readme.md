@@ -9,18 +9,62 @@
 - TOTP stands for Time-Based One-Time Password. This is a standardized method for generating a regularly-changing password that is based on a shared secret, ensuring that each code is unique.
 - HOTP stands for HMAC-Based One-Time Password. Unlike TOTP, HOTP passwords are based on a counter mechanism and do not expire after a short period of time, making them suitable for situations where time-sync might not be possible.
 
+## Table of Contents
+- [Features](#features)
+- [Installation](#installation)
+- [Example](#example)
+- [Resources](#resources)
+- [Inspiration](#inspiration)
+- [Library](#library)
+- [Todo](#todo)
+
 ### Features:
 - Easy setup via QR code, "otpauth://" URL, or manual entry
 - Secure storage of all data in encrypted form on the iOS keychain
 - Full support for time-based and counter-based one-time passwords as standardized in RFC 4226 and 6238
 - Offline functionality with no internet connection required, ensuring that your secret keys never leave your device
 
-### Swift Package Manager (SPM)
+### Installation
 
 To integrate TwoFa into your Xcode project using Swift Package Manager, add it as a dependency to your `Package.swift`:
 
 ```swift
 .package(url: "https://github.com/sentryco/TwoFa", branch: "main")
+```
+
+### Example:
+
+From "OTP url" to "one time password"
+```swift
+let account = try? Account(url: URL(string: "otpauth://totp/test?secret=GEZDGNBV")!)
+print(account?.currentPassword) // 123321
+```
+
+This code snippet uses a predefined secret key and generates a TOTP that changes every 30 seconds.
+
+```swift
+let totpGenerator = TOTPGenerator(secret: "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ", digits: 6, timeInterval: 30)
+let totp = totpGenerator.generateOTP()
+print("Generated TOTP: \(totp)")
+```
+
+The HOTP is generated using a counter, which should be incremented for each new OTP generation.
+
+```swift
+let hotpGenerator = HOTPGenerator(secret: "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ", counter: 1)
+let hotp = hotpGenerator.generateOTP()
+print("Generated HOTP: \(hotp)")
+```
+
+Validating an OTP: This example demonstrates how to validate an OTP that a user might enter. This snippet checks if the provided OTP is valid for the given secret key.
+
+```swift
+let isValid = OTPValidator.validate(otp: "123456", secret: "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ")
+if isValid {
+    print("OTP is valid.")
+} else {
+    print("OTP is invalid.")
+}
 ```
 
 ### Resources:
@@ -62,11 +106,6 @@ To integrate TwoFa into your Xcode project using Swift Package Manager, add it a
 - https://github.com/beemdevelopment/Aegis (has TOTP bulk importers etc, Android)
 - Minimal TOTP code: https://github.com/keepassium/KeePassium/blob/master/KeePassiumLib/KeePassiumLib/db/totp/TOTPGenerator.swift
 
-### Example:
-```swift
-let account = try? Account(url: URL(string: "otpauth://totp/test?secret=GEZDGNBV")!)
-print(account?.currentPassword) // 123321
-```
 ### Notes:
 - Has url filtering: https://github.com/ericlewis/THOTP/blob/master/Sources/THOTP/Extensions/PasswordProtocol%2BURL.swift
 - Can create OTP URI strings: https://stefansundin.github.io/2fa-qr/
@@ -105,3 +144,11 @@ In contrast, in TOTP there is only one valid OTP at any given time - the one gen
 - Add a Table of Contents: Given the length of your README, a table of contents at the beginning would help users navigate through the document.
 - Add a "Getting Started" or "Installation" section: If your project requires any setup or installation, include a section that walks users through that process.
 - Add a "Usage" or "Examples" section: Expand on your current "Example" section to provide more examples of how to use your project.
+- Is GraphProgressView still in use? Add the SwiftUI version of it?
+- **Unit Testing and Code Coverage**: More comprehensive testing and entropy in the tests. Improving the unit tests to cover more scenarios and edge cases would enhance the reliability of the code.
+- **Error Handling**: There are multiple places in the code where error handling could be improved. For example, in OTPAccIniter.swift, the method validateHost throws an error if the host is not "hotp" or "totp", but it might be beneficial to handle different types of errors more gracefully or provide more detailed error messages.
+- **Security and Encryption**: Given the nature of the application dealing with two-factor authentication, prioritizing the security aspects such as how secrets are handled or improving the cryptographic implementations would be crucial. For instance, ensuring that the generation of secrets in RandomOTP.swift is secure and adheres to best practices.
+- **Refactoring and Modularization**: Some parts of the codebase could benefit from refactoring to improve modularity and reusability. For example, separating the URL building logic in AbsoluteURLBuilder.swift into more granular components could make the code easier to manage and test.
+- **User Documentation**: Improving the README file to include more comprehensive guides on setup, usage, and contribution could make the project more accessible to new developers or users.
+- Add more examples to the README
+- Only add MockGen package for testing in the package.swift file

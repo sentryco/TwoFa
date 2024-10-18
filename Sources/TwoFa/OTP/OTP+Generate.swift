@@ -3,14 +3,26 @@ import CryptoKit
 import Foundation
 /**
  * Generate
- * - Description: This extension provides methods to generate a One-Time Password (OTP) based on the current date or a specified counter value. It uses the secret key, period, number of digits, and hashing algorithm specified in the OTP instance to generate the OTP.
+ * - Description: This extension provides methods to generate a One-Time
+ *                Password (OTP) based on the current date or a specified
+ *                counter value. It uses the secret key, period, number of
+ *                digits, and hashing algorithm specified in the OTP instance
+ *                to generate the OTP.
  */
 extension OTP {
    /**
     * Create OTP value from OTP-config and date
-    * - Description: This function generates a One-Time Password (OTP) based on the current date. The OTP is generated using the secret key, period, number of digits, and hashing algorithm specified in the OTP instance. The date parameter is used to calculate the counter value for the OTP generation. By default, the current date and time is used.
+    * - Description: This function generates a One-Time Password (OTP) based
+    *                on the current date. The OTP is generated using the
+    *                secret key, period, number of digits, and hashing
+    *                algorithm specified in the OTP instance. The date
+    *                parameter is used to calculate the counter value for the
+    *                OTP generation. By default, the current date and time is
+    *                used.
     * - Returns: I.E: 935170, 172681 etc (One time code string or error)
-    * - Parameter date: The date for which you want to create the "OneTimePassword" default is now (Date object to generate password for)
+    * - Parameter date: The date for which you want to create the
+    *                   "OneTimePassword" default is now (Date object to
+    *                   generate password for)
     */
    public func generate(date: Date = .init()) throws -> String {
       let counter: UInt64 = .init(date.timeIntervalSince1970 / self.period).bigEndian // Calculate the counter value as the number of periods since the Unix epoch, converted to big-endian format
@@ -18,7 +30,12 @@ extension OTP {
    }
    /**
     * One time code string, nil if error
-    * - Description: This function generates a One-Time Password (OTP) based on the number of seconds elapsed since the Unix epoch (January 1, 1970, at 00:00:00 UTC). It calculates the counter value by dividing the provided time by the period of the OTP instance and then generates the OTP using the specified hashing algorithm.
+    * - Description: This function generates a One-Time Password (OTP) based
+    *                on the number of seconds elapsed since the Unix epoch
+    *                (January 1, 1970, at 00:00:00 UTC). It calculates the
+    *                counter value by dividing the provided time by the period
+    *                of the OTP instance and then generates the OTP using the
+    *                specified hashing algorithm.
     * - parameter secondsPast1970: Time since Unix epoch (01 Jan 1970 00:00 UTC)
     */
    public func generate(secondsPast1970: Int) throws -> String {
@@ -32,7 +49,13 @@ extension OTP {
    /**
     * Generate `one-time-code` string from counter value
     * - Abstract: This is basically how you generate HTOP
-    * - Description: This function generates a One-Time Password (OTP) based on a given counter value. The counter value is a moving factor that changes with each password generation. It starts with an initial value and increments by one each time a new password is generated. This ensures that each password is unique and cannot be reused, providing a high level of security.
+    * - Description: This function generates a One-Time Password (OTP) based
+    *                on a given counter value. The counter value is a moving
+    *                factor that changes with each password generation. It
+    *                starts with an initial value and increments by one each
+    *                time a new password is generated. This ensures that each
+    *                password is unique and cannot be reused, providing a high
+    *                level of security.
     * - parameter counter: Counter value (progressed period)
     */
    public func generate(counter: UInt64) throws -> String {
@@ -67,7 +90,11 @@ extension OTP {
 extension OTP {
    /**
     * Verify that the time integer is positive
-    * - Description: This method validates that the number of digits specified for the OTP falls within the accepted range. The OTP standard requires the number of digits to be between 6 and 8 inclusive to ensure a balance between security and usability.
+    * - Description: This method validates that the number of digits specified
+    *                for the OTP falls within the accepted range. The OTP
+    *                standard requires the number of digits to be between 6 and
+    *                8 inclusive to ensure a balance between security and
+    *                usability.
     * - parameter digit: Number of allowed digits in the OTP
     */
    internal func hasValidDigit(digit: Int) -> Bool {
@@ -75,7 +102,11 @@ extension OTP {
    }
    /**
     * Verify that time integer is positive
-    * - Description: This method checks if the provided time, which is the number of seconds since the Unix epoch (01 Jan 1970 00:00 UTC), is a positive integer. This is important because a negative time value is not valid in this context and would lead to incorrect OTP generation.
+    * - Description: This method checks if the provided time, which is the
+    *                number of seconds since the Unix epoch (01 Jan 1970 00:00
+    *                UTC), is a positive integer. This is important because a
+    *                negative time value is not valid in this context and
+    *                would lead to incorrect OTP generation.
     * - parameter time: Time since Unix epoch (01 Jan 1970 00:00 UTC)
     */
    internal func hasValidTime(time: Int) -> Bool {

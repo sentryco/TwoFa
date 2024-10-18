@@ -1,12 +1,22 @@
 import Foundation
 /**
  * Getter
- * - Description: This extension provides computed properties that facilitate access to the current one-time password and the absolute URL representation of the OTPAccount. These properties abstract the underlying logic required to generate the current password based on the generator type and to construct a URL that encapsulates all the account details for sharing or exporting purposes.
+ * - Description: This extension provides computed properties that facilitate
+ *                access to the current one-time password and the absolute URL
+ *                representation of the OTPAccount. These properties abstract
+ *                the underlying logic required to generate the current password
+ *                based on the generator type and to construct a URL that
+ *                encapsulates all the account details for sharing or exporting
+ *                purposes.
  */
 extension OTPAccount {
    /**
     * A computed property representing the current password at any given time
-    * - Description: This property generates and returns the current one-time password (OTP) based on the generator type. If the generator type is HOTP, it generates an OTP for the specified counter value. If the generator type is TOTP, it generates an OTP for the current time.
+    * - Description: This property generates and returns the current one-time
+    *                password (OTP) based on the generator type. If the
+    *                generator type is HOTP, it generates an OTP for the
+    *                specified counter value. If the generator type is TOTP, it
+    *                generates an OTP for the current time.
     */
    public var currentCode: String? {
       if case .htop(let counter/*: Int*/) = self.generatorType { // Check if the generator type is HOTP
@@ -20,7 +30,12 @@ extension OTPAccount {
    /**
     * Returns `absolute-URL` from `OTPAccount`
     * - Abstract: Create `otp-URL` for export etc
-    * - Description: This computed property generates an absolute URL from the OTPAccount instance. The URL is constructed using various properties of the OTPAccount such as the generator type, OTP, issuer, name, and image URL. This URL can be used for exporting the OTPAccount or sharing it across different platforms.
+    * - Description: This computed property generates an absolute URL from
+    *                the OTPAccount instance. The URL is constructed using
+    *                various properties of the OTPAccount such as the generator
+    *                type, OTP, issuer, name, and image URL. This URL can be
+    *                used for exporting the OTPAccount or sharing it across
+    *                different platforms.
     * - Fixme: ⚠️️ break up this var a bit, consult copilot etc
     * ## Examples
     * OTPAccount().absoluteURL // URL(string: "otpauth://hotp/test?secret=GEZDGNBV&algorithm=SHA512&digits=6&counter=1"

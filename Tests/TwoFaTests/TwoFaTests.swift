@@ -3,8 +3,6 @@ import XCTest
 import CryptoKit
 import Foundation
 @testable import MockGen
-//@testable import Account
-//@testable import SecLib
 @testable import TwoFa
 /**
  * - Fixme: ⚠️️ Add more tests, see github issues etc
@@ -108,7 +106,9 @@ extension TwoFaTests {
    }
    /**
     * URL test (Tests encoding to otp-account)
-    * - Description: This test verifies the encoding of the OTP account into a URL. It ensures that the URL is correctly formatted and contains the necessary parameters for OTP generation.
+    * - Description: This test verifies the encoding of the OTP account into a URL.
+    *                It ensures that the URL is correctly formatted and contains the
+    *                necessary parameters for OTP generation.
     * - Fixme: ⚠️️  add more tests?
     */
    fileprivate static func testURL() throws {
@@ -129,7 +129,11 @@ extension TwoFaTests {
    }
    /**
     * Base64 Encoded test
-    * - Description: This test validates the functionality of creating an OTP object with a base64-encoded secret and generating a one-time password. It ensures that the generated OTP has the correct length and adheres to the expected format and value constraints.
+    * - Description: This test validates the functionality of creating an OTP
+    *                object with a base64-encoded secret and generating a one-time
+    *                password. It ensures that the generated OTP has the correct
+    *                length and adheres to the expected format and value
+    *                constraints.
     */
    fileprivate static func runBase64Encoded() throws {
       // let secretData = otp.secret.data(using: String.Encoding.ascii)!
@@ -149,7 +153,11 @@ extension TwoFaTests {
    }
    /**
     * Test Multi ASCII
-    * - Description: This test verifies the generation of OTP values using different algorithms (SHA-1, SHA-256, and SHA-512) and different test data. It ensures that the generated OTP values match the expected results for each algorithm and test data combination.
+    * - Description: This test verifies the generation of OTP values using
+    *                different algorithms (SHA-1, SHA-256, and SHA-512) and
+    *                different test data. It ensures that the generated OTP
+    *                values match the expected results for each algorithm and
+    *                test data combination.
     */
    fileprivate static func testMultiASCII() throws {
       // Define data for SHA-1, SHA-256, and SHA-512 algorithms
@@ -204,7 +212,11 @@ extension TwoFaTests {
    }
    /**
     * ASCII Test
-    * - Description: This function tests the generation of One-Time Passwords (OTPs) using ASCII representations of secret keys for SHA-1, SHA-256, and SHA-512 hashing algorithms. It validates the OTP generation by comparing the generated values against known expected results.
+    * - Description: This function tests the generation of One-Time Passwords
+    *                (OTPs) using ASCII representations of secret keys for SHA-1,
+    *                SHA-256, and SHA-512 hashing algorithms. It validates the OTP
+    *                generation by comparing the generated values against known
+    *                expected results.
     */
    fileprivate static func testingAscii() throws {
       Swift.print("testingAscii") // Print a message to the console indicating that we are testing ASCII data
@@ -242,7 +254,8 @@ extension TwoFaTests {
    }
    /**
     * Test Many HTOP
-    * - Description: This function tests multiple HMAC-Based One-Time Passwords (HOTP) to ensure the OTP generation is accurate and reliable.
+    * - Description: This function verifies the accuracy and reliability of
+    *                multiple HMAC-Based One-Time Passwords (HOTP) generation.
     */
    fileprivate static func testManyHTOP() throws {
       let counterBasedTests: [(Int, String, String, String)] = [
@@ -287,7 +300,9 @@ extension TwoFaTests {
    }
    /**
     * Test Many TOTP
-    * - Description: This function tests multiple Time-Based One-Time Passwords (TOTP) to ensure the OTP generation is accurate and adheres to the expected time-based algorithm outputs.
+    * - Description: This function tests multiple Time-Based One-Time Passwords
+    *                (TOTP) to ensure the OTP generation is accurate and adheres
+    *                to the expected time-based algorithm outputs.
     */
    fileprivate static func testManyTOTP() throws {
       let timeBasedTests: [(Int, String, String, String)] = [
@@ -331,7 +346,10 @@ extension TwoFaTests {
    }
    /**
     * Test Multiple HEX Encoded HTOP
-    * - Description: This function tests multiple HMAC-Based One-Time Passwords (HOTP) that are HEX encoded to ensure the OTP generation is accurate and adheres to the expected HMAC-based algorithm outputs.
+    * - Description: This function tests multiple HMAC-Based One-Time Passwords
+    *                (HOTP) that are HEX encoded to ensure the OTP generation
+    *                is accurate and adheres to the expected HMAC-based algorithm
+    *                outputs.
     */
    fileprivate static func testMultipleHEXEncodedHTOP() throws {
       // Define the `data` variable as a `Data` object initialized with a hex string
@@ -346,7 +364,12 @@ extension TwoFaTests {
    }
    /**
     * Test random bulk test
-    * - Description: This test function verifies the random generation of bulk OTP accounts. It ensures that each account can be successfully created, converted to a URL string, and reconstructed from that URL string without loss of data. The test asserts that the number of successfully created and validated OTP accounts matches the expected count.
+    * - Description: This test function verifies the random generation of bulk
+    *                OTP accounts. It ensures that each account can be successfully
+    *                created, converted to a URL string, and reconstructed from
+    *                that URL string without loss of data. The test asserts that
+    *                the number of successfully created and validated OTP accounts
+    *                matches the expected count.
     * - Fixme: ⚠️️ We could test
     */
    fileprivate static func testRandomBulk() throws {

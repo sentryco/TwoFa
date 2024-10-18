@@ -27,7 +27,12 @@ public struct OTPAccount {
    public var generatorType: GeneratorType
    /**
     * Init password
-    * - Description: This initializer creates an instance of OTPAccount with the provided parameters. The OTPAccount object represents an account that uses One-Time Passwords (OTP) for authentication. It includes the account name, issuer, an optional image URL, the OTP instance, and the type of OTP generator (time-based or HMAC-based).
+    * - Description: This initializer creates an instance of OTPAccount with
+    *                the provided parameters. The OTPAccount object represents
+    *                an account that uses One-Time Passwords (OTP) for
+    *                authentication. It includes the account name, issuer, an
+    *                optional image URL, the OTP instance, and the type of OTP
+    *                generator (time-based or HMAC-based).
     * - Fixme: ⚠️️ Add suport for image-url: image: URL(string: "https://www.images.com/image.png")!
     * - Fixme: ⚠️️ Throw error if parameters are not correct, with error that explaines why things are not correct etc. eventually present to user how to correct input data etc
     * - Parameters:

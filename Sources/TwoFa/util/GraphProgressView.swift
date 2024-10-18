@@ -1,6 +1,8 @@
 /**
  * Import the required modules and define platform-specific typealiases
- * - Note: This code imports the required modules for the GraphProgressView class and defines platform-specific typealiases for `Color` and `View`.
+ * - Note: This code imports the required modules for the GraphProgressView
+ *         class and defines platform-specific typealiases for `Color` and
+ *         `View`.
  * - Warning: ⚠️️ This code assumes that the platform is either iOS or macOS. It may not work on other platforms.
  */
 #if os(iOS)
@@ -14,7 +16,10 @@ public typealias OSView = NSView // Define the `OSView` typealias as `NSView` fo
 #endif
 /**
  * A view that shows a circular progress bar
- * - Description: The `GraphProgressView` class provides a customizable circular progress bar that visually represents a percentage value. The progress is indicated by a filled arc that can change color based on predefined thresholds.
+ * - Description: The `GraphProgressView` class provides a customizable
+ *                circular progress bar that visually represents a percentage
+ *                value. The progress is indicated by a filled arc that can
+ *                change color based on predefined thresholds.
  * fixme: add the swiftui version as well? or is that a wrapper around this?
  * - Remark: works for iOS and macOS
  * ## Example:
@@ -27,7 +32,10 @@ public final class GraphProgressView: OSView {
    #endif
    /**
     * When should the time threshold indication be turned on (green / red)
-    * - Description: The `threshold` property defines the point at which the progress bar changes color to indicate a warning (e.g., from green to red). A lower threshold means the color change will happen earlier as progress increases.
+    * - Description: The `threshold` property defines the point at which the
+    *                progress bar changes color to indicate a warning (e.g., from
+    *                green to red). A lower threshold means the color change will
+    *                happen earlier as progress increases.
     */
    public var threshold: CGFloat = 0.2 { // The threshold value for the graph progress
       didSet { // Property observer that redraws the graph when the threshold value changes
@@ -36,7 +44,9 @@ public final class GraphProgressView: OSView {
    }
    /**
     * Progress from 0-1
-    * - Description: This property represents the progress of the circular progress bar. It ranges from 0 to 1, where 0 means no progress and 1 means the task is complete.
+    * - Description: This property represents the progress of the circular
+    *                progress bar. It ranges from 0 to 1, where 0 means no
+    *                progress and 1 means the task is complete.
     */
    public var progress: CGFloat = 0.0 { // The progress value for the graph
       didSet { // Property observer that redraws the graph when the progress value changes
@@ -45,7 +55,13 @@ public final class GraphProgressView: OSView {
    }
    /**
     * Set tint colors
-    * - Description: This property allows you to set the tint colors for different states of the progress bar. It is a tuple containing three colors for idle, start, and end states respectively. The idle color is used when there is no progress, the start color is used at the beginning of the progress, and the end color is used when the progress is complete.
+    * - Description: This property allows you to set the tint colors for 
+    *                different states of the progress bar. It is a tuple 
+    *                containing three colors for idle, start, and end states 
+    *                respectively. The idle color is used when there is no 
+    *                progress, the start color is used at the beginning of the 
+    *                progress, and the end color is used when the progress is 
+    *                complete.
     * - Remark: Foreground color
     * - Remark: These can also be set exernally etc
     */
@@ -56,7 +72,10 @@ public final class GraphProgressView: OSView {
    }
    /**
     * The stroke color for the background of the graph.
-    * - Description: This property sets the color used for the circular progress bar's background stroke. It visually distinguishes the progress path from the rest of the view. By default, it is set to a dark gray color.
+    * - Description: This property sets the color used for the circular
+    *                progress bar's background stroke. It visually distinguishes
+    *                the progress path from the rest of the view. By default, it
+    *                is set to a dark gray color.
     * - Note: This property is used to set the stroke color for the background of the graph.
     * - Warning: This property is not documented yet.
     */
@@ -67,7 +86,11 @@ public final class GraphProgressView: OSView {
    }
    /**
     * Line-weight
-    * - Description: This property defines the thickness of the progress bar's stroke. A larger value results in a thicker stroke, making the progress bar more prominent. Conversely, a smaller value results in a thinner stroke, giving the progress bar a more subtle appearance.
+    * - Description: This property defines the thickness of the progress bar's
+    *                stroke. A larger value results in a thicker stroke, making
+    *                the progress bar more prominent. Conversely, a smaller value
+    *                results in a thinner stroke, giving the progress bar a more
+    *                subtle appearance.
     * - Remark: Filled or stroked
     */
    public var lineWeight: CGFloat = 4 { // The line weight for the graph
@@ -82,7 +105,11 @@ public final class GraphProgressView: OSView {
 extension GraphProgressView {
    /**
     * Container for the colors used in the arc stroke
-    * - Description: Represents a set of colors used at different stages of the progress within the `GraphProgressView`. The `idle` color is used when there is no progress, the `start` color is used at the beginning of the progress, and the `end` color is used when the progress is nearing completion.
+    * - Description: Represents a set of colors used at different stages of the
+    *                progress within the `GraphProgressView`. The `idle` color is
+    *                used when there is no progress, the `start` color is used at
+    *                the beginning of the progress, and the `end` color is used
+    *                when the progress is nearing completion.
     */
    public typealias TintColors = (
       idle: Color, // The color for the idle state of the graph
@@ -96,7 +123,11 @@ extension GraphProgressView {
 extension GraphProgressView {
    /**
     * We don't call this method directly, calling the variables will indirectly call it via setNeedsDisplay
-    * - Description: This method is called when the view needs to be redrawn. This can happen when the view's bounds change, its properties change, or when the system explicitly calls for a redraw. This method is overridden to draw the graph on top of the view's background.
+    * - Description: This method is called when the view needs to be redrawn.
+    *                This can happen when the view's bounds change, its properties
+    *                change, or when the system explicitly calls for a redraw.
+    *                This method is overridden to draw the graph on top of the
+    *                view's background.
     * - Remark: When appearance change, this is redrawn
     * - Parameter rect: Size and placment of arc
     */
@@ -111,7 +142,12 @@ extension GraphProgressView {
 extension GraphProgressView {
    /**
     * Get current color
-    * - Description: This computed property returns the current color of the graph based on the progress and threshold values. If the progress is less than the threshold, it returns the start color. If the progress is greater than 1 minus the threshold, it returns the end color. Otherwise, it returns the idle color.
+    * - Description: This computed property returns the current color of the
+    *                graph based on the progress and threshold values. If the
+    *                progress is less than the threshold, it returns the start
+    *                color. If the progress is greater than 1 minus the threshold,
+    *                it returns the end color. Otherwise, it returns the idle
+    *                color.
     * - Remark: This method returns the current color of the graph based on the progress and threshold values.
     */
    public var color: Color { // Style
@@ -129,7 +165,15 @@ extension GraphProgressView {
    }
    /**
     * Draw graphic
-    * - Description: This method is responsible for drawing the graph's foreground and background arcs. It first removes any existing sublayers to prepare for a fresh draw. Then, it creates and adds a background arc with full progress to visually represent the track on which the foreground arc will animate. Finally, it creates and adds a foreground arc that represents the current progress of the task or timer, using the color that reflects the current state based on the progress and threshold values.
+    * - Description: This method is responsible for drawing the graph's
+    *                foreground and background arcs. It first removes any
+    *                existing sublayers to prepare for a fresh draw. Then, it
+    *                creates and adds a background arc with full progress to
+    *                visually represent the track on which the foreground arc
+    *                will animate. Finally, it creates and adds a foreground arc
+    *                that represents the current progress of the task or timer,
+    *                using the color that reflects the current state based on the
+    *                progress and threshold values.
     * - Remark: This method draws the graph on top of the view's background.
     */
    fileprivate func drawGraphic() {
@@ -154,7 +198,10 @@ extension GraphProgressView {
    }
    /**
     * Draws the arc shape
-    * - Description: This method creates an arc shape layer with a specified line color and progress. The arc shape layer is used to visually represent the progress of a task or timer in the GraphProgressView.
+    * - Description: This method creates an arc shape layer with a specified
+    *                line color and progress. The arc shape layer is used to
+    *                visually represent the progress of a task or timer in the
+    *                GraphProgressView.
     * - Remark: This method creates an arc shape with a given line color and progress.
     * - Parameters:
     *   - lineColor: color of line
