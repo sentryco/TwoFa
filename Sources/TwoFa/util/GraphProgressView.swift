@@ -7,11 +7,11 @@
  */
 #if os(iOS)
 import UIKit // Import the UIKit module for iOS
-public typealias Color = UIColor // Define the `Color` typealias as `UIColor` for iOS
+public typealias OSColor = UIColor // Define the `Color` typealias as `UIColor` for iOS
 public typealias OSView = UIView // Define the `OSView` typealias as `UIView` for iOS
 #elseif os(macOS)
 import Cocoa // Import the Cocoa module for macOS
-public typealias Color = NSColor // Define the `Color` typealias as `NSColor` for macOS
+public typealias OSColor = NSColor // Define the `Color` typealias as `NSColor` for macOS
 public typealias OSView = NSView // Define the `OSView` typealias as `NSView` for macOS
 #endif
 /**
@@ -79,7 +79,7 @@ public final class GraphProgressView: OSView {
     * - Note: This property is used to set the stroke color for the background of the graph.
     * - Warning: This property is not documented yet.
     */
-   public var backgroundStrokeColor: Color = .darkGray {
+   public var backgroundStrokeColor: OSColor = .darkGray {
       didSet { // Property observer that redraws the graph when the stroke color changes
          drawGraphic() // Redraw the graph when the stroke color changes
       }
@@ -112,9 +112,9 @@ extension GraphProgressView {
     *                when the progress is nearing completion.
     */
    public typealias TintColors = (
-      idle: Color, // The color for the idle state of the graph
-      start: Color, // The color for the start state of the graph
-      end: Color // The color for the end state of the graph
+      idle: OSColor, // The color for the idle state of the graph
+      start: OSColor, // The color for the start state of the graph
+      end: OSColor // The color for the end state of the graph
    )
 }
 /**
@@ -150,7 +150,7 @@ extension GraphProgressView {
     *                color.
     * - Remark: This method returns the current color of the graph based on the progress and threshold values.
     */
-   public var color: Color { // Style
+   public var color: OSColor { // Style
       if progress < threshold {
          // Return the start color if the progress is less than the threshold
          return tintColors.start
@@ -207,7 +207,7 @@ extension GraphProgressView {
     *   - lineColor: color of line
     *   - progress: 0-1
     */
-   fileprivate func createArcShape(lineColor: Color, progress: CGFloat) -> CAShapeLayer {
+   fileprivate func createArcShape(lineColor: OSColor, progress: CGFloat) -> CAShapeLayer {
       let center: CGPoint = .init(x: self.bounds.midX, y: self.bounds.midY) // Get the center point of the view
       let radius: CGFloat = max(self.bounds.size.height / 1.0, self.bounds.size.width / 1.0) - lineWeight // Calculate the radius of the arc shape
       let path: CGMutablePath = .init() // Create a new mutable path
@@ -222,7 +222,7 @@ extension GraphProgressView {
          clockwise: false // A Boolean value indicating whether the arc should be drawn clockwise or counterclockwise
       ) // Add an arc to the path with the specified center, radius, start angle, end angle, and direction
       let layer: CAShapeLayer = .init() // Create a new shape layer
-      layer.fillColor = Color.clear.cgColor // Set the fill color of the shape layer to clear
+      layer.fillColor = OSColor.clear.cgColor // Set the fill color of the shape layer to clear
       layer.strokeColor = lineColor.cgColor // Set the stroke color of the shape layer to the specified line color
       layer.lineWidth = lineWeight // Set the line width of the shape layer to the specified line weight
       layer.lineCap = .round // Set the line cap of the shape layer to round
