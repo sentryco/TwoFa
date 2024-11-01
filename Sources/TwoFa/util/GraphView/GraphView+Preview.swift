@@ -13,7 +13,7 @@ import SwiftUI
             progress: .constant(0.18), // Represents the current progress as a fraction of the total, where 0.18 indicates 18% completion.
             threshold: .constant(0.2), // Sets the threshold value at 20%, used to trigger certain actions when exceeded.
             tintColors: .constant((.blue, .green, .red)), // Defines the colors used for tinting elements in the graph, in this case blue, green, and red.
-            // ⚠️️ Use .init(light: lightGray.opacity(0.5), dark: darkGray.opacity(0.5))
+            // ⚠️️ Use .init(light: lightGray.opacity(0.5), dark: darkGray.opacity(0.5)) (use hybridcolor package etc)
             backgroundStrokeColor: .constant(.gray), // Specifies the color of the background stroke of the graph as gray.
             lineWeight: .constant(4) // Determines the thickness of the line in the graph, set to 4 points.
          )
