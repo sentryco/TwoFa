@@ -15,6 +15,18 @@ extension OTPArc {
       internal let background: Color
       internal let lineWidth: CGFloat
       /**
+       * - Note: Needed for public init
+       */
+      public init(tints: (idle: Color, start: Color, end: Color), iconSize: CGFloat, font: Font, fontColor: Color, bgStrokColor: Color, background: Color, lineWidth: CGFloat) {
+         self.tints = tints
+         self.iconSize = iconSize
+         self.font = font
+         self.fontColor = fontColor
+         self.bgStrokColor = bgStrokColor
+         self.background = background
+         self.lineWidth = lineWidth
+      }
+      /**
        * Default graph style
        */
       public static let defaultGraphStyle: GraphStyle = {
