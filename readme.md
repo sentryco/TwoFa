@@ -1,4 +1,5 @@
 [![Tests](https://github.com/sentryco/TwoFa/actions/workflows/Tests.yml/badge.svg)](https://github.com/sentryco/TwoFa/actions/workflows/Tests.yml)
+[![codebeat badge](https://codebeat.co/badges/55316ce1-2cce-4173-ab3c-84ed7a82c5ea)](https://codebeat.co/projects/github-com-sentryco-twofa-main)
 
 # TwoFa ⏳
 
