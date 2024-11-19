@@ -15,10 +15,24 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v4
 
-    - name: Install Swift 6.0
+    - name: Download and Install Swift 6.0
       run: |
-        curl -s https://swift.org/builds/swift-6.0-release/xcode/swift-6.0-RELEASE/swift-6.0-RELEASE-osx.pkg > swift.pkg
+        # Define the Swift package URL
+        SWIFT_URL="https://swift.org/builds/swift-6.0-release/xcode/swift-6.0-RELEASE/swift-6.0-RELEASE-osx.pkg"
+
+        # Download the Swift package
+        curl -fSL "$SWIFT_URL" -o swift.pkg
+
+        # Check if the file was downloaded successfully
+        if [ ! -f swift.pkg ]; then
+          echo "Swift package download failed!"
+          exit 1
+        fi
+
+        # Install the downloaded Swift package
         sudo installer -pkg swift.pkg -target /
+
+        # Verify the Swift version
         swift --version
 
     - name: Build
