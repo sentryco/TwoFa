@@ -156,7 +156,9 @@ extension OTPTimer {
     *                to the console.
     * - Note: If you forget to add event handler, this will be called
     */
-   fileprivate static let defaultOnChange: OTPTimerCallback = { (_: OTPTimer) in
-      Swift.print("Default onChange")
+   fileprivate static var defaultOnChange: OTPTimerCallback {
+      { (_: OTPTimer) in
+         Swift.print("Default onChange")
+      }
    }
 }

@@ -59,7 +59,9 @@ public struct OTPArc: View {
     *               `OTPAccount`. If an account is provided, it 
     *               initializes an `OTPTimer` to manage OTP 
     *               generation timing.
-    * - Parameter account: The data model to generate timer from etc
+    * - Parameters:
+    *   - account: The data model to generate timer from etc
+    *   - graphStyle: - Fixme: ⚠️️ Add doc
     */
    public init(account: OTPAccount?, graphStyle: GraphStyle = .defaultGraphStyle) {
       self.account = account

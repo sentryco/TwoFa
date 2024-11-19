@@ -1,11 +1,11 @@
-// swift-tools-version:5.9
+// swift-tools-version:6.0
 import PackageDescription
 
 let package = Package(
     name: "TwoFa", // Defines the package name as TwoFa
     platforms: [
-        .macOS(.v14), // macOS 14 and later
-        .iOS(.v17) // iOS 17 and later
+        .macOS(.v15), // macOS 14 and later
+        .iOS(.v18) // iOS 17 and later
     ], // Specifies the platforms supported by the package
     products: [
         .library(
