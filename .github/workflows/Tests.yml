@@ -1,3 +1,6 @@
+# This workflow will build a Swift project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
+
 name: Tests
 
 on:
@@ -12,31 +15,8 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - name: Check out code
-      uses: actions/checkout@v4
-
-    - name: Download and Install Swift 6.0
-      run: |
-        # Define the Swift package URL
-        SWIFT_URL="https://swift.org/builds/swift-6.0-release/xcode/swift-6.0-RELEASE/swift-6.0-RELEASE-osx.pkg"
-
-        # Download the Swift package
-        curl -fSL "$SWIFT_URL" -o swift.pkg
-
-        # Check if the file was downloaded successfully
-        if [ ! -f swift.pkg ]; then
-          echo "Swift package download failed!"
-          exit 1
-        fi
-
-        # Install the downloaded Swift package
-        sudo installer -pkg swift.pkg -target /
-
-        # Verify the Swift version
-        swift --version
-
+    - uses: actions/checkout@v4
     - name: Build
       run: swift build -v
-
     - name: Run tests
       run: swift test -v
