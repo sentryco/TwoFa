@@ -6,7 +6,7 @@
       "location" : "https://github.com/eonist/FileSugar.git",
       "state" : {
         "branch" : "master",
-        "revision" : "4e26b7124dce0d873678ee61546bce04f246353a"
+        "revision" : "c34a50f8c1976dabc0f70d14324784694dd94532"
       }
     },
     {
@@ -15,25 +15,16 @@
       "location" : "https://github.com/eonist/JSONSugar.git",
       "state" : {
         "branch" : "master",
-        "revision" : "a8631c693c43165c22f67afe985992ca0652d7fe"
-      }
-    },
-    {
-      "identity" : "logger",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sentryco/Logger.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "43b17e4f686c7ba44ceeacc4a92529571cdb246b"
+        "revision" : "f27ec9a55e157d59b3a626f6fc78416fba4d3204"
       }
     },
     {
       "identity" : "mockgen",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sentryco/MockGen",
+      "location" : "https://github.com/sentryco/MockGen.git",
       "state" : {
         "branch" : "main",
-        "revision" : "9ad0cd550b6ab65dab412df6c089d07caf3dd43c"
+        "revision" : "12643b5ba623fc6426d4121f74911f97aa56bb60"
       }
     }
   ],
