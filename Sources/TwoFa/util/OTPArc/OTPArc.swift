@@ -61,7 +61,7 @@ public struct OTPArc: View {
     *               generation timing.
     * - Parameters:
     *   - account: The data model to generate timer from etc
-    *   - graphStyle: - Fixme: ⚠️️ Add doc
+    *   - graphStyle: The style of the graph.
     */
    public init(account: OTPAccount?, graphStyle: GraphStyle = .defaultGraphStyle) {
       self.account = account

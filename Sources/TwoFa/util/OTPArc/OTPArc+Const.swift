@@ -17,13 +17,13 @@ extension OTPArc {
       /**
        * - Note: Needed for public init
        * - Parameters:
-       *   - tints: - Fixme: ⚠️️ Add doc
-       *   - iconSize: - Fixme: ⚠️️ Add doc
-       *   - font: - Fixme: ⚠️️ Add doc
-       *   - fontColor: - Fixme: ⚠️️ Add doc
-       *   - bgStrokColor: - Fixme: ⚠️️ Add doc
-       *   - background: - Fixme: ⚠️️ Add doc
-       *   - lineWidth: - Fixme: ⚠️️ Add doc
+       *   - tints: The idle, start, and end colors of the arc.
+       *   - iconSize: The size of the icon.
+       *   - font: The font of the text.
+       *   - fontColor: The color of the text.
+       *   - bgStrokColor: The background stroke color of the arc.
+       *   - background: The background color of the arc.
+       *   - lineWidth: The line width of the arc.
        */
       public init(tints: (idle: Color, start: Color, end: Color), iconSize: CGFloat, font: Font, fontColor: Color, bgStrokColor: Color, background: Color, lineWidth: CGFloat) {
          self.tints = tints
