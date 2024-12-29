@@ -20,10 +20,9 @@
 - [Todo](#todo)
 
 ### Features:
-- Easy setup via QR code, "otpauth://" URL, or manual entry
-- Secure storage of all data in encrypted form on the iOS keychain
-- Full support for time-based and counter-based one-time passwords as standardized in RFC 4226 and 6238
-- Offline functionality with no internet connection required, ensuring that your secret keys never leave your device
+- 📷 Easy setup via QR code, "otpauth://" URL, or manual entry
+- 🔒 Secure storage of all data in encrypted form on the iOS keychain
+- 🔄 Full support for time-based and counter-based one-time passwords as standardized in RFC 4226 and 6238
 
 ### Installation
 
@@ -140,12 +139,12 @@ In contrast, in TOTP there is only one valid OTP at any given time - the one gen
 - More URI parsing: https://github.com/mattrubin/OneTimePassword/blob/develop/Sources/Token%2BURL.swift
 - More uri unit-testing: https://github.com/freeotp/freeotp-ios/blob/master/FreeOTPTests/URI.swift
 - More tests: https://github.com/mattrubin/OneTimePassword/blob/develop/Tests/GeneratorTests.swift
-- Add the swift code for graphprogressview etc
-- Look for more ways of doing things better in the other projects
+- Add the swift code for graphprogressview etc ✅
+- Look for more ways of doing things better in the other projects 👈
 - Add a Table of Contents: Given the length of your README, a table of contents at the beginning would help users navigate through the document.
 - Add a "Getting Started" or "Installation" section: If your project requires any setup or installation, include a section that walks users through that process.
-- Add a "Usage" or "Examples" section: Expand on your current "Example" section to provide more examples of how to use your project.
-- Is GraphProgressView still in use? Add the SwiftUI version of it?
+- Add a "Usage" or "Examples" section: Expand on your current "Example" section to provide more examples of how to use your project. 👈
+- Is GraphProgressView still in use? Add the SwiftUI version of it? ✅
 - **Unit Testing and Code Coverage**: More comprehensive testing and entropy in the tests. Improving the unit tests to cover more scenarios and edge cases would enhance the reliability of the code.
 - **Error Handling**: There are multiple places in the code where error handling could be improved. For example, in OTPAccIniter.swift, the method validateHost throws an error if the host is not "hotp" or "totp", but it might be beneficial to handle different types of errors more gracefully or provide more detailed error messages.
 - **Security and Encryption**: Given the nature of the application dealing with two-factor authentication, prioritizing the security aspects such as how secrets are handled or improving the cryptographic implementations would be crucial. For instance, ensuring that the generation of secrets in RandomOTP.swift is secure and adheres to best practices.
