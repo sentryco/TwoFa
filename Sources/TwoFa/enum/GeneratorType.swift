@@ -38,6 +38,7 @@ public enum GeneratorType {
     *                that each password is unique and cannot be reused,
     *                providing a high level of security.
     * - Parameter counter: The initial counter value for the generator.
+    * - Fixme: ⚠️️ rename to correct name: hotp
     */
    case htop(_ counter: Int)
 }
