@@ -67,35 +67,45 @@ extension Array where Element == UInt8 {
     *           character in the hexadecimal string, parsing each byte and
     *           appending it to the Data object. If the hexadecimal string is
     *           invalid, the method removes all bytes from the Data object.
+    * - Note: recently refactored with o1
     * - Parameter hex: Hex string to convert to data
     */
    public init(hex: String) {
       self.init()
-      // Adjusting capacity for the byte array, considering two characters form one byte.
-      reserveCapacity(hex.unicodeScalars.lazy.underestimatedCount / 2)
       // Removing "0x" prefix if present, to correctly process the hex string.
-      let hexStr = hex.dropFirst(hex.hasPrefix("0x") ? 2 : 0)
-      var tempByte: UInt8? // Temporary storage for the current byte being constructed.
-      for char in hexStr {
+      let hexStr = hex.hasPrefix("0x") ? String(hex.dropFirst(2)) : hex
+      // Adjusting capacity for the byte array, considering two characters form one byte.
+      reserveCapacity((hexStr.count + 1) / 2)
+      
+      var index = hexStr.startIndex
+      
+      // If the hex string has an odd number of characters, process the first character separately.
+      if hexStr.count % 2 != 0 {
+         let char = hexStr[index]
          // Convert the current hex character to its byte value.
-         if let byte = char.hexDigitValue {
-            let value = UInt8(byte)
-            // If there's a byte in temporary storage, combine it with the current value and append to the Data object.
-            if let tb = tempByte {
-               append(tb << 4 | value)
-               tempByte = nil // Clear temporary storage after appending.
-            } else {
-               tempByte = value // Store current value in temporary storage for next iteration.
-            }
+         if let byteValue = char.hexDigitValue {
+            append(UInt8(byteValue))
+            index = hexStr.index(after: index) // Move to the next character.
          } else {
-            // If an invalid character is encountered, clear the Data object and exit.
+            // If an invalid character is encountered, clear the array and exit.
             removeAll()
             return
          }
       }
-      // Append any remaining byte in temporary storage to the Data object.
-      if let remainingByte = tempByte {
-         append(remainingByte)
+      
+      // Process the remaining hex characters two at a time.
+      while index < hexStr.endIndex {
+         let nextIndex = hexStr.index(index, offsetBy: 2)
+         let byteString = hexStr[index..<nextIndex]
+         // Convert the two-character hex string to a byte.
+         if let byte = UInt8(byteString, radix: 16) {
+            append(byte)
+         } else {
+            // If an invalid character is encountered, clear the array and exit.
+            removeAll()
+            return
+         }
+         index = nextIndex
       }
    }
 }
@@ -134,22 +144,26 @@ extension Data {
     *                `EncodingType`. This is useful for understanding the
     *                format of the data and for performing appropriate encoding
     *                or decoding operations.
+    * - Note: recently refactored with o1. now tests ascii first. 
     * - Fixme: ⚠️️ add this to unit tests
     */
    public var encodingType: EncodingType {
-      // Check if the data can be represented as a Base64 encoded string
-      if !self.base64EncodedString().isEmpty {
-         // If the data can be represented as a Base64 encoded string, return .base64
-         return .base64
-      }
-      // Check if the data can be represented as an ASCII string
-      else if let str: String = .init(data: self, encoding: .ascii), !str.isEmpty {
-         // If the data can be represented as an ASCII string, return .ascii
-         return .ascii
-      }
-      // If the data cannot be represented as a Base64 or ASCII string, it must be a hexadecimal string
-      else {
-         return .hex
-      }
+       // Try to get the string from data
+       guard let string = String(data: self, encoding: .utf8) else {
+           // If data cannot be represented as String, return .hex (assuming binary data)
+           return .hex
+       }
+       // Check if the string is valid Base64
+       if Data(base64Encoded: string) != nil {
+           return .base64
+       }
+       // Check if the string consists only of hex digits
+       else if string.allSatisfy({ $0.isHexDigit }) {
+           return .hex
+       }
+       // Else, it's ASCII
+       else {
+           return .ascii
+       }
    }
 }

@@ -60,6 +60,42 @@ extension Generator {
          truncatedHash // The truncated hash value to format
       )
    }
+   // ⚠️️ suggestio from o1
+//   internal static func generate2<T>(otp: OTP, counter: UInt64, hashFunc: T.Type) throws -> String where T: HashFunction {
+//       // Calculate the HMAC hash of the OTP and counter
+//       let hashData = try hmac(
+//           otp: otp, // The secret key used to generate the one-time password
+//           counter: counter // The counter value used to generate the one-time password
+//       )
+//
+//       // Perform dynamic truncation as per RFC 4226
+//       guard let lastByte = hashData.last else {
+//           throw OTPError.invalidHash // Handle the case where hashData is empty
+//       }
+//       let offset = Int(lastByte & 0x0f) // Get the offset from the low 4 bits of the last byte
+//
+//       // Ensure there are enough bytes to extract starting from the offset
+//       guard hashData.count >= offset + 4 else {
+//           throw OTPError.invalidHashLength // Handle insufficient hashData length
+//       }
+//
+//       // Extract 4 bytes starting from the offset
+//       let truncatedHashData = hashData.subdata(in: offset..<(offset + 4))
+//       // Convert the 4 bytes into a UInt32 value
+//       var truncatedHash = truncatedHashData.withUnsafeBytes { $0.load(as: UInt32.self) }
+//       truncatedHash = UInt32(bigEndian: truncatedHash) & 0x7fffffff // Convert to big-endian and mask the most significant bit
+//
+//       // Calculate the truncated hash value as a value between 0 and 10^digits-1
+//       let modulo = UInt32(pow(10, Float(otp.digits)))
+//       truncatedHash = truncatedHash % modulo
+//
+//       // Format the truncated hash value as a string with leading zeros and return it
+//       return String(
+//           format: "%0*u", // The format string to use to format the truncated hash value
+//           otp.digits,     // The number of digits to format the truncated hash value to
+//           truncatedHash   // The truncated hash value to format
+//       )
+//   }
 }
 /**
  * hmac
@@ -82,44 +118,34 @@ extension Generator {
     *   - otp: The `OneTimePassword` instance
     *   - counter: Counter value (progressed period)
     */
-   fileprivate static func hmac(otp: OTP, counter: UInt64) throws -> Data {
-      var bigCounter: UInt64 = counter.bigEndian // Convert the counter to big-endian format
-      // Convert the counter to a data object
-      let counterData: Data = .init( // Initialize a new Data object with the counter value
-         bytes: &bigCounter, // The counter value used to generate the one-time password
-         count: MemoryLayout<UInt64>.size // The size of the counter value in bytes
-      )
-      switch otp.algo { // Choose the appropriate HMAC algorithm based on the OTP algorithm
-      case .sha1: // SHA1 hash function (dep.recated due to security vulnerabilities)
-         // Generate an HMAC-SHA1 hash of the counter data using the secret key
-         // Returns a Data object containing the HMAC-SHA1 hash of the counter data using the secret key
-         // Note: SHA1 is no longer considered secure for cryptographic purposes and should be used with caution.
-         // Generate an HMAC-SHA1 hash of the counter data using the secret key
-         // Create a Data instance containing the HMAC-SHA1 hash
-         return Data(
-            HMAC<Insecure.SHA1>.authenticationCode( // Generate an HMAC using SHA1 which is considered insecure for cryptographic purposes
-               for: counterData, // The counter value used to generate the one-time password
-               using: SymmetricKey(data: otp.secret) // The secret key used to generate the one-time password
-            )
-         )
-      case .sha256: // Case for generating HMAC using SHA256 algorithm
-         // Generate an HMAC-SHA256 hash of the counter data using the secret key
-         // Returns a Data object containing the HMAC-SHA256 hash of the counter data using the secret key
-         return Data(
-            HMAC<SHA256>.authenticationCode( // Generate an HMAC using SHA256
-               for: counterData, // The counter value used to generate the one-time password
-               using: SymmetricKey(data: otp.secret) // The secret key used to generate the one-time password
-            )
-         )
-      case .sha512: // Generate an HMAC-SHA512 hash of the counter data using the secret key
-         // Generate an HMAC-SHA512 hash of the counter data using the secret key
-         // Returns a Data object containing the HMAC-SHA512 hash of the counter data using the secret key
-         return Data(
-            HMAC<SHA512>.authenticationCode( // Generate an HMAC using SHA512
-               for: counterData, // The counter value used to generate the one-time password
-               using: SymmetricKey(data: otp.secret) // The secret key used to generate the one-time password
-            )
-         )
+       // Start of Selection
+       fileprivate static func hmac(otp: OTP, counter: UInt64) throws -> Data {
+          var bigCounter = counter.bigEndian // Convert the counter to big-endian format
+          // Initialize a new Data object with the counter value
+          let counterData = Data(
+             bytes: &bigCounter, // The counter value used to generate the one-time password
+             count: MemoryLayout<UInt64>.size // The size of the counter value in bytes
+          )
+          
+          // Generate an HMAC hash of the counter data using the secret key and specified hash function
+          let key = SymmetricKey(data: otp.secret)
+          
+          // Use the algorithm to compute HMAC
+          let hmacData = otp.algo.hmac(for: counterData, using: key)
+          return hmacData
+       }
+       
+}
+
+extension Algorithm {
+   func hmac(for data: Data, using key: SymmetricKey) -> Data {
+      switch self {
+      case .sha1:
+         return Data(HMAC<Insecure.SHA1>.authenticationCode(for: data, using: key))
+      case .sha256:
+         return Data(HMAC<SHA256>.authenticationCode(for: data, using: key))
+      case .sha512:
+         return Data(HMAC<SHA512>.authenticationCode(for: data, using: key))
       }
    }
 }
