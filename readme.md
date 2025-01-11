@@ -6,9 +6,9 @@
 > 2FA framework (One-time-password) (TOTP / HOTP)
 
 ### Description:
-- It helps keep your online accounts secure by generating unique one-time passwords, which you use in combination with your other passwords to log into supporting websites.
-- TOTP stands for Time-Based One-Time Password. This is a standardized method for generating a regularly-changing password that is based on a shared secret, ensuring that each code is unique.
-- HOTP stands for HMAC-Based One-Time Password. Unlike TOTP, HOTP passwords are based on a counter mechanism and do not expire after a short period of time, making them suitable for situations where time-sync might not be possible.
+- It helps keep your online accounts secure by generating unique one-time passwords. You use these passwords along with your regular passwords to log into websites that support them.
+- TOTP (Time-Based One-Time Password) is a standard method that generates a regularly changing password based on a shared secret, ensuring each code is unique.
+- HOTP (HMAC-Based One-Time Password) is based on a counter mechanism and doesn't expire quickly, making it suitable when time synchronization isn't possible.
 
 ## Table of Contents
 - [Features](#features)
