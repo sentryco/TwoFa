@@ -20,7 +20,7 @@ final class TwoFaTests: XCTestCase {
          try Self.runBase64Encoded() // Base64 Encoded test
          try Self.testMultiASCII() // Test Multi ASCII
          try Self.testingAscii() // ASCII Test
-         try Self.testManyHTOP() // Test Many HTOP
+         try Self.testManyHOTP() // Test Many HTOP
          try Self.testManyTOTP() // Test Many TOTP
          try Self.testMultipleHEXEncodedHTOP() // Test Multiple HEX Encoded HTOP
          try Self.testRandomBulk() // OTP batch tests (Fuzzy)
@@ -160,51 +160,58 @@ extension TwoFaTests {
     *                test data combination.
     */
    fileprivate static func testMultiASCII() throws {
-      // Define data for SHA-1, SHA-256, and SHA-512 algorithms
-      let dataSHA1: Data = "12345678901234567890".data(using: String.Encoding.ascii)!
-      let dataSHA256: Data = "12345678901234567890123456789012".data(using: String.Encoding.ascii)!
-      let dataSHA512: Data = "1234567890123456789012345678901234567890123456789012345678901234".data(using: String.Encoding.ascii)!
-      // Define test data for SHA-1, SHA-256, and SHA-512 algorithms
-      let dataSHA1Arr: [(Int, String)] = [
-         (1_111_111_109, "07081804"),
-         (1_111_111_111, "14050471"),
-         (1_234_567_890, "89005924"),
-         (2_000_000_000, "69279037"),
-         (20_000_000_000, "65353130")
+      // Define test vectors for different algorithms
+      struct TestVector {
+         let algorithm: Algorithm
+         let secret: Data
+         let testData: [(Int, String)]
+      }
+      let testVectors: [TestVector] = [
+         TestVector(
+            algorithm: .sha1,
+            secret: "12345678901234567890".data(using: .ascii)!,
+            testData: [
+               (1_111_111_109, "07081804"),
+               (1_111_111_111, "14050471"),
+               (1_234_567_890, "89005924"),
+               (2_000_000_000, "69279037"),
+               (20_000_000_000, "65353130")
+            ]
+         ),
+         TestVector(
+            algorithm: .sha256,
+            secret: "12345678901234567890123456789012".data(using: .ascii)!,
+            testData: [
+               (1_111_111_109, "68084774"),
+               (1_111_111_111, "67062674"),
+               (1_234_567_890, "91819424"),
+               (2_000_000_000, "90698825"),
+               (20_000_000_000, "77737706")
+            ]
+         ),
+         TestVector(
+            algorithm: .sha512,
+            secret: "1234567890123456789012345678901234567890123456789012345678901234".data(using: .ascii)!,
+            testData: [
+               (1_111_111_109, "25091201"),
+               (1_111_111_111, "99943326"),
+               (1_234_567_890, "93441116"),
+               (2_000_000_000, "38618901"),
+               (20_000_000_000, "47863826")
+            ]
+         )
       ]
-      // Define test data for SHA-256 algorithm
-      let dataSHA256Arr: [(Int, String)] = [
-         (1_111_111_109, "68084774"),
-         (1_111_111_111, "67062674"),
-         (1_234_567_890, "91819424"),
-         (2_000_000_000, "90698825"),
-         (20_000_000_000, "77737706")
-      ]
-      // Define test data for SHA-512 algorithm
-      let dataSHA512Arr: [(Int, String)] = [
-         (1_111_111_109, "25091201"),
-         (1_111_111_111, "99943326"),
-         (1_234_567_890, "93441116"),
-         (2_000_000_000, "38618901"),
-         (20_000_000_000, "47863826")
-      ]
-      // Combine the data and test data for each algorithm
-      let shas: [(Algorithm, [(Int, String)], Data)] = [
-         (Algorithm.sha1, dataSHA1Arr, dataSHA1), // The SHA-1 algorithm, test data, and expected results
-         (Algorithm.sha256, dataSHA256Arr, dataSHA256), // The SHA-256 algorithm, test data, and expected results
-         (Algorithm.sha512, dataSHA512Arr, dataSHA512) // The SHA-512 algorithm, test data, and expected results
-      ]
-      // For each algorithm, and for each test data, generate an OTP value using the `OTP.generate` method, and assert that it matches the expected value
-      try shas.forEach { (sha: (Algorithm, [(Int, String)], Data)) in
-         try sha.1.forEach {
+      // Test each vector
+      for testVector in testVectors {
+         for (time, expectedOTP) in testVector.testData {
             XCTAssertEqual(
-               try OTP( // Create an OTP object
-                  secret: sha.2, // The secret key used to generate the one-time password
-                  period: 30, // The time period for which the OTP is valid
-                  digits: 8, // The number of digits in the OTP
-                  algo: sha.0 // The algorithm used to generate the OTP
-               ).generate(secondsPast1970: $0.0), // The time at which to generate the OTP
-               $0.1 // The expected OTP value
+               try OTP(
+                  secret: testVector.secret,
+                  period: 30,
+                  digits: 8,
+                  algo: testVector.algorithm
+               ).generate(secondsPast1970: time),
+               expectedOTP
             )
          }
       }
@@ -219,85 +226,66 @@ extension TwoFaTests {
     *                expected results.
     */
    fileprivate static func testingAscii() throws {
-      Swift.print("testingAscii") // Print a message to the console indicating that we are testing ASCII data
-      let dataSHA1: Data = "12345678901234567890".data(using: String.Encoding.ascii)! // Define data for the SHA-1 algorithm
-      let dataSHA256: Data = "12345678901234567890123456789012".data(using: String.Encoding.ascii)! // Define data for the SHA-256 algorithm
-      let dataSHA512: Data = "1234567890123456789012345678901234567890123456789012345678901234".data(using: String.Encoding.ascii)! // Define data for the SHA-512 algorithm
-      XCTAssertEqual(
-         try OTP( // Create an OTP object
-            secret: dataSHA1, // The secret key used to generate the one-time password
-            period: 30, // The time period for which the OTP is valid
-            digits: 8, // The number of digits in the OTP
-            algo: .sha1 // The algorithm used to generate the OTP
-         ).generate(secondsPast1970: 59), // The time at which to generate the OTP
-         "94287082" // The expected OTP value
-      ) // Generate an OTP value using the `OTP.generate` method with the SHA-1 algorithm and the `dataSHA1` data, and assert that it matches the expected value
-      XCTAssertEqual(
-         try OTP( // Create an OTP object
-            secret: dataSHA256, // The secret key used to generate the one-time password
-            period: 30, // The time period for which the OTP is valid
-            digits: 8, // The number of digits in the OTP
-            algo: .sha256 // The algorithm used to generate the OTP
-         ).generate(secondsPast1970: 59), // The time at which to generate the OTP
-         "46119246" // The expected OTP value
-      ) // Generate an OTP value using the `OTP.generate` method with the SHA-256 algorithm and the `dataSHA256` data, and assert that it matches the expected value
-      XCTAssertEqual(
-         try OTP( // Create an OTP object
-            secret: dataSHA512, // The secret key used to generate the one-time password
-            period: 30, // The time period for which the OTP is valid
-            digits: 8, // The number of digits in the OTP
-            algo: .sha512 // The algorithm used to generate the OTP
-         ).generate(secondsPast1970: 59), // The time at which to generate the OTP
-         "90693936" // The expected OTP value
-      ) // Generate an OTP value using the `OTP.generate` method with the SHA-512 algorithm and the `dataSHA512` data, and assert that it matches the expected value
-      Swift.print("testingAscii: \(Optional(true) == true ? "✅" : "🚫")") // Print a message to the console indicating whether the test passed or failed
+       Swift.print("testingAscii") // Print a message to the console indicating that we are testing ASCII data
+
+       // Define test cases for each algorithm with the corresponding data and expected OTP value
+       let testCases: [(algo: Algorithm, dataString: String, expectedOTP: String)] = [
+           (.sha1,   "12345678901234567890",                                            "94287082"),
+           (.sha256, "12345678901234567890123456789012",                                 "46119246"),
+           (.sha512, "1234567890123456789012345678901234567890123456789012345678901234", "90693936")
+       ]
+
+       for testCase in testCases {
+           let data = testCase.dataString.data(using: .ascii)! // Convert the data string to Data using ASCII encoding
+           let otp = try OTP(
+               secret: data,       // The secret key used to generate the one-time password
+               period: 30,         // The time period for which the OTP is valid
+               digits: 8,          // The number of digits in the OTP
+               algo: testCase.algo // The algorithm used to generate the OTP
+           ) // Create an OTP object with the specified parameters
+           let generatedOTP = try otp.generate(secondsPast1970: 59) // Generate the OTP at the specified time
+           XCTAssertEqual(generatedOTP, testCase.expectedOTP) // Assert that the generated OTP matches the expected value
+       }
+
+       Swift.print("testingAscii: \(Optional(true) == true ? "✅" : "🚫")") // Print a message to the console indicating whether the test passed or failed
    }
    /**
     * Test Many HTOP
     * - Description: This function verifies the accuracy and reliability of
     *                multiple HMAC-Based One-Time Passwords (HOTP) generation.
     */
-   fileprivate static func testManyHTOP() throws {
-      let counterBasedTests: [(Int, String, String, String)] = [
-         // Define test data for the HOTP algorithm
-         (0, "755224", "875740", "125165"),
-         (1, "287082", "247374", "342147"),
-         (2, "359152", "254785", "730102"),
-         (3, "969429", "496144", "778726"),
-         (4, "338314", "480556", "937510"),
-         (5, "254676", "697997", "848329"),
-         (6, "287922", "191609", "266680"),
-         (7, "162583", "579288", "588359"),
-         (8, "399871", "895912", "039399"),
-         (9, "520489", "184989", "643409")
-      ]
-      let data = "12345678901234567890".data(using: String.Encoding.ascii)!
-      // For each test data, create a new HOTP object using the `OTP.init` initializer with the corresponding counter and secret, generate an OTP value using the `OTP.generate` method, and assert that it matches the expected value
-      for i: Int in 0...(counterBasedTests.count - 1) {
-         // Generate an OTP value using the SHA-1 algorithm and the `data` secret, with the counter value `i`, and assign it to `sha1`
-         let sha1: String = try OTP( // Create an OTP object
-            secret: data, // The secret key used to generate the one-time password
-            algo: .sha1 // The algorithm used to generate the OTP
-         ).generate(counter: UInt64(i)) // The counter value at which to generate the OTP
-         // Assert that the generated OTP value matches the expected value for the current test data
-         XCTAssertEqual(sha1, counterBasedTests[i].1)
-         // Generate an OTP value using the SHA-256 algorithm and the `data` secret, with the counter value `i`, and assign it to `sha256`
-         let sha256: String = try OTP(
-            secret: data, // The secret key used to generate the one-time password
-            algo: .sha256 // The algorithm used to generate the OTP
-         ).generate(counter: UInt64(i)) // The counter value at which to generate the OTP
-         // Assert that the generated OTP value matches the expected value for the current test data
-         XCTAssertEqual(sha256, counterBasedTests[i].2)
-         // Generate an OTP value using the SHA-512 algorithm and the `data` secret, with the counter value `i`, and assign it to `sha512`
-         let sha512: String = try OTP( // Create an OTP object
-            secret: data, // The secret key used to generate the one-time password
-            algo: .sha512 // The algorithm used to generate the OTP
-         ).generate(counter: UInt64(i)) // The counter value at which to generate the OTP
-         // Assert that the generated OTP value matches the expected value for the current test data
-         XCTAssertEqual(sha512, counterBasedTests[i].3)
-      }
-      Swift.print("testManyHTOP: \(Optional(true) == true ? "✅" : "🚫")")
-   }
+    fileprivate static func testManyHOTP() throws {
+       // Define test data for the HOTP algorithm
+       // Each tuple contains: (counter value, [expected SHA-1 OTP, expected SHA-256 OTP, expected SHA-512 OTP])
+       let counterBasedTests: [(Int, [String])] = [
+          (0, ["755224", "875740", "125165"]),
+          (1, ["287082", "247374", "342147"]),
+          (2, ["359152", "254785", "730102"]),
+          (3, ["969429", "496144", "778726"]),
+          (4, ["338314", "480556", "937510"]),
+          (5, ["254676", "697997", "848329"]),
+          (6, ["287922", "191609", "266680"]),
+          (7, ["162583", "579288", "588359"]),
+          (8, ["399871", "895912", "039399"]),
+          (9, ["520489", "184989", "643409"])
+       ]
+       let data = "12345678901234567890".data(using: .ascii)! // The secret key used to generate the one-time password
+       let algorithms: [Algorithm] = [.sha1, .sha256, .sha512] // The algorithms to test
+
+       // For each test data, generate an OTP for each algorithm and assert it matches the expected value
+       for (counter, expectedOtps) in counterBasedTests {
+          for (index, algo) in algorithms.enumerated() {
+             // Generate an OTP value using the current algorithm and counter
+             let otp = try OTP(
+                secret: data, // The secret key used to generate the one-time password
+                algo: algo // The algorithm used to generate the OTP
+             ).generate(counter: UInt64(counter)) // The counter value at which to generate the OTP
+             // Assert that the generated OTP value matches the expected value for the current test data and algorithm
+             XCTAssertEqual(otp, expectedOtps[index], "Failed at counter \(counter) with algorithm \(algo)")
+          }
+       }
+       Swift.print("testManyHOTP: \(Optional(true) == true ? "✅" : "🚫")")
+    }
    /**
     * Test Many TOTP
     * - Description: This function tests multiple Time-Based One-Time Passwords
@@ -305,44 +293,52 @@ extension TwoFaTests {
     *                to the expected time-based algorithm outputs.
     */
    fileprivate static func testManyTOTP() throws {
-      let timeBasedTests: [(Int, String, String, String)] = [
-         // Define test data for the TOTP algorithm
-         (59, "94287082", "32247374", "69342147"),
-         (1_111_111_109, "07081804", "34756375", "63049338"),
-         (1_111_111_111, "14050471", "74584430", "54380122"),
-         (1_234_567_890, "89005924", "42829826", "76671578"),
-         (2_000_000_000, "69279037", "78428693", "56464532"),
-         (20_000_000_000, "65353130", "24142410", "69481994")
-      ]
-      let data: Data = "12345678901234567890".data(using: String.Encoding.ascii)!
-      // For each test data, create a new TOTP object using the `OTP.init` initializer with the corresponding secret, generate an OTP value using the `OTP.generate` method with the corresponding time, and assert that it matches the expected value for each algorithm
-      for (date, expSHA1, expSHA256, expSHA512) in timeBasedTests {// for i in 0...(counterBasedTests.count - 1) {
-         // Generate an OTP value using the SHA-1 algorithm and the `data` secret, with the time value `date`, and assign it to `sha1`
-         let sha1 = try OTP(
-            secret: data, // The secret key used to generate the one-time password
-            digits: 8, // The number of digits in the OTP
-            algo: .sha1 // The algorithm used to generate the OTP
-         ).generate(secondsPast1970: date) // The time at which to generate the OTP
-         // Assert that the generated OTP value matches the expected value for the SHA-1 algorithm
-         XCTAssertEqual(sha1, expSHA1)
-         // Generate an OTP value using the SHA-256 algorithm and the `data` secret, with the time value `date`, and assign it to `sha256`
-         let sha256: String = try OTP(
-            secret: data, // The secret key used to generate the one-time password
-            digits: 8, // The number of digits in the OTP
-            algo: .sha256 // The algorithm used to generate the OTP
-         ).generate(secondsPast1970: date) // The time at which to generate the OTP
-         // Assert that the generated OTP value matches the expected value for the SHA-256 algorithm
-         XCTAssertEqual(sha256, expSHA256)
-         // Generate an OTP value using the SHA-512 algorithm and the `data` secret, with the time value `date`, and assign it to `sha512`
-         let sha512: String = try OTP(
-            secret: data, // The secret key used to generate the one-time password
-            digits: 8, // The number of digits in the OTP
-            algo: .sha512 // The algorithm used to generate the OTP
-         ).generate(secondsPast1970: date) // The time at which to generate the OTP
-         // Assert that the generated OTP value matches the expected value for the SHA-512 algorithm
-         XCTAssertEqual(sha512, expSHA512)
-      }
-      Swift.print("testManyTOTP: \(Optional(true) == true ? "✅" : "🚫")")
+       // Define test data for the TOTP algorithm
+       // Each tuple contains a time value and expected OTP codes for different algorithms
+       let timeBasedTests: [(date: Int, expSHA1: String, expSHA256: String, expSHA512: String)] = [
+           (59, "94287082", "32247374", "69342147"),
+           (1_111_111_109, "07081804", "34756375", "63049338"),
+           (1_111_111_111, "14050471", "74584430", "54380122"),
+           (1_234_567_890, "89005924", "42829826", "76671578"),
+           (2_000_000_000, "69279037", "78428693", "56464532"),
+           (20_000_000_000, "65353130", "24142410", "69481994")
+       ]
+
+       let data: Data = "12345678901234567890".data(using: String.Encoding.ascii)!
+       
+       // For each test data, generate OTP values using different algorithms and assert they match the expected values
+       for test in timeBasedTests {
+           let date = test.date
+           
+           // Generate an OTP value using the SHA-1 algorithm and the `data` secret, with the time value `date`
+           let sha1 = try OTP(
+               secret: data,            // The secret key used to generate the one-time password
+               digits: 8,               // The number of digits in the OTP
+               algo: .sha1              // The algorithm used to generate the OTP
+           ).generate(secondsPast1970: date) // The time at which to generate the OTP
+           // Assert that the generated OTP value matches the expected value for the SHA-1 algorithm
+           XCTAssertEqual(sha1, test.expSHA1)
+           
+           // Generate an OTP value using the SHA-256 algorithm and the `data` secret, with the time value `date`
+           let sha256 = try OTP(
+               secret: data,            // The secret key used to generate the one-time password
+               digits: 8,               // The number of digits in the OTP
+               algo: .sha256            // The algorithm used to generate the OTP
+           ).generate(secondsPast1970: date)
+           // Assert that the generated OTP value matches the expected value for the SHA-256 algorithm
+           XCTAssertEqual(sha256, test.expSHA256)
+           
+           // Generate an OTP value using the SHA-512 algorithm and the `data` secret, with the time value `date`
+           let sha512 = try OTP(
+               secret: data,            // The secret key used to generate the one-time password
+               digits: 8,               // The number of digits in the OTP
+               algo: .sha512            // The algorithm used to generate the OTP
+           ).generate(secondsPast1970: date)
+           // Assert that the generated OTP value matches the expected value for the SHA-512 algorithm
+           XCTAssertEqual(sha512, test.expSHA512)
+       }
+       // Print the result of the test
+       Swift.print("testManyTOTP: \(Optional(true) == true ? "✅" : "🚫")")
    }
    /**
     * Test Multiple HEX Encoded HTOP
@@ -373,26 +369,31 @@ extension TwoFaTests {
     * - Fixme: ⚠️️ We could test
     */
    fileprivate static func testRandomBulk() throws {
-      let count: Int = 100 // Define the number of OTP accounts to generate
+      let count = 100 // Number of OTP accounts to generate
       // - Fixme: ⚠️️ Use MockGen to generate names and brands
-      let names: [String] = ["Amy", "John", "David"] // Define a list of possible names for the OTP accounts
-      let issuers: [String] = ["apple.com", "twitter.com", "google.com"] // Define a list of possible issuers for the OTP accounts
-      // Generate `count` OTP accounts and filter out any that fail to generate
-      let bulk = try (0..<count).filter { (_: Int) in
-         let name: String = names.randomElement()! // Choose a random name from the `names` list
-         let issuer: String = issuers.randomElement()! // Choose a random issuer from the `issuers` list
-         guard let otpAccount: OTPAccount = RandomOTP.randomOTPAccount(
-            name: name, // The name of the OTP account
-            issuer: issuer // The issuer of the OTP account
-         ) else {
+      let names = ["Amy", "John", "David"] // Possible names for the OTP accounts
+      let issuers = ["apple.com", "twitter.com", "google.com"] // Possible issuers for the OTP accounts
+
+      // Generate `count` OTP accounts and verify that they can be reconstructed from their URLs
+      let success = try (0..<count).allSatisfy { _ in
+         let name = names.randomElement()! // Choose a random name
+         let issuer = issuers.randomElement()! // Choose a random issuer
+
+         guard let otpAccount = RandomOTP.randomOTPAccount(name: name, issuer: issuer) else {
             throw NSError(domain: "Unable to create otp", code: 0)
-         } // Generate a random OTP account using the `RandomOTP.randomOTPAccount` method, and throw an error if the generation fails
-         let otpURL: String = otpAccount.absoluteURL.absoluteString // Get the absolute URL string of the generated OTP account
-         let newOTP: OTPAccount = try .init(url: URL(string: otpURL)!) // Create a new OTP account from the URL string using the `OTPAccount.init(url:)` initializer
-         let isEqual: Bool = otpURL == newOTP.absoluteURL.absoluteString // Check if the original and new OTP account URLs are equal
-         return isEqual // Return whether the URLs are equal
+         }
+
+         let otpURLString = otpAccount.absoluteURL.absoluteString // Get the absolute URL string of the generated OTP account
+
+         guard let otpURL = URL(string: otpURLString),
+               let newOTPAccount = try? OTPAccount(url: otpURL) else {
+            return false // Return false if new OTPAccount cannot be created
+         }
+
+         // Check if the original and new OTP account URLs are equal
+         return otpURLString == newOTPAccount.absoluteURL.absoluteString
       }
-      let success: Bool = bulk.count == count // Check if the number of generated OTP accounts matches the expected count
+
       Swift.print("testRandomBulk count: \(count) - success: \(success ? "✅" : "🚫")")
       XCTAssertTrue(success)
    }
