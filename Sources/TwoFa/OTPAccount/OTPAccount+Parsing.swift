@@ -55,6 +55,7 @@ extension OTPAccount {
     *                including the issuer, OTP, generator type, and an optional
     *                image URL string.
     * - Fixme: ⚠️️ maybe use the builder design pattern?
+    * fixme: ⚠️️ Why does this have fixed variables? get these from otp, figure out what calls this? deprecated etc?
     * - Parameters:
     *   - queryItems: query items from URL
     *   - host: host: totp or htop

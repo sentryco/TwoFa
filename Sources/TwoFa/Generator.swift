@@ -140,12 +140,36 @@ extension Generator {
 extension Algorithm {
    func hmac(for data: Data, using key: SymmetricKey) -> Data {
       switch self {
-      case .sha1:
-         return Data(HMAC<Insecure.SHA1>.authenticationCode(for: data, using: key))
-      case .sha256:
-         return Data(HMAC<SHA256>.authenticationCode(for: data, using: key))
-      case .sha512:
-         return Data(HMAC<SHA512>.authenticationCode(for: data, using: key))
+      case .sha1: // SHA1 hash function (deprecated due to security vulnerabilities)
+         // Generate an HMAC-SHA1 hash of the data using the secret key
+         // Returns a Data object containing the HMAC-SHA1 hash of the data using the secret key
+         // Note: SHA1 is no longer considered secure for cryptographic purposes and should be used with caution.
+         // Generate an HMAC-SHA1 hash of the data using the secret key
+         // Create a Data instance containing the HMAC-SHA1 hash
+         return Data(
+            HMAC<Insecure.SHA1>.authenticationCode( // Generate an HMAC using SHA1 which is considered insecure for cryptographic purposes
+               for: data, // The data used to generate the one-time password
+               using: key // The secret key used to generate the one-time password
+            )
+         )
+      case .sha256: // Case for generating HMAC using SHA256 algorithm
+         // Generate an HMAC-SHA256 hash of the data using the secret key
+         // Returns a Data object containing the HMAC-SHA256 hash of the data using the secret key
+         return Data(
+            HMAC<SHA256>.authenticationCode( // Generate an HMAC using SHA256
+               for: data, // The data used to generate the one-time password
+               using: key // The secret key used to generate the one-time password
+            )
+         )
+      case .sha512: // Generate an HMAC-SHA512 hash of the counter data using the secret key
+         // Generate an HMAC-SHA512 hash of the data using the secret key
+         // Returns a Data object containing the HMAC-SHA512 hash of the data using the secret key
+         return Data(
+            HMAC<SHA512>.authenticationCode( // Generate an HMAC using SHA512
+               for: data, // The data used to generate the one-time password
+               using: key // The secret key used to generate the one-time password
+            )
+         )
       }
    }
 }

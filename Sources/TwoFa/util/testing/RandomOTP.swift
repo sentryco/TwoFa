@@ -26,14 +26,19 @@ public class RandomOTP {
     * let randomOTP: String = RandomOTP.randomOTPAccountURLStr ?? "otpauth://hotp/test?secret=6UAOpz+x3dsNrQ==&algorithm=SHA512&digits=6&counter=1"
     */
    internal static var randomOTPAccountURLStr: String? {
-      // Attempt to generate a random first name, return nil if unsuccessful
-      guard let firstName: String = MockGen.randomFirstName else { return nil }
-      // Attempt to generate a random brand name, return nil if unsuccessful
-      guard let brand: String = MockGen.randomBrand  else { return nil }
-      // Attempt to generate an email using the random first name and brand, return nil if unsuccessful
-      guard let name: String = MockGen.getEmail(name: firstName, brand: brand) else { return nil }
-      // Attempt to create a random OTP account using the generated name and brand, return nil if unsuccessful
-      guard let otpAccount: OTPAccount = RandomOTP.randomOTPAccount(name: name, issuer: brand) else { return nil }
+      // Attempt to generate a random first name, brand name, email, and OTP account; return nil if any step fails
+      guard
+         // Generate a random first name
+         let firstName: String = MockGen.randomFirstName,
+         // Generate a random brand name
+         let brand: String = MockGen.randomBrand,
+         // Generate an email using the random first name and brand
+         let name: String = MockGen.getEmail(name: firstName, brand: brand),
+         // Create a random OTP account using the generated name and brand
+         let otpAccount: OTPAccount = RandomOTP.randomOTPAccount(name: name, issuer: brand)
+      else {
+         return nil
+      }
       // Return the absolute URL string of the generated OTP account
       return otpAccount.absoluteURL.absoluteString
    }
@@ -52,39 +57,35 @@ public class RandomOTP {
     * - Returns: otp-url (can be parsed to OTPAccount / OTP etc)
     */
    internal static func randomOTPAccount(name: String, issuer: String) -> OTPAccount? {
-      // Generate a random secret key between 8 and 16 bytes long
-      guard let secret: Data = randomSecret(min: 8, max: 16) else {
-        //  Logger.warn("\(Trace.trace()) no secret", tag: .security) // Log a warning if the secret key cannot be generated
-         return nil // Return nil if the secret key cannot be generated
-      }
-      // Choose a random time period of either 30 or 60 seconds
-      let period: Double = Bool.random() ? 30 : 60
-      // Choose a random hash algorithm from the SHA family
-      let algoType: Algorithm = [.sha512, .sha256, .sha1].randomElement() ?? .sha1
-      // Choose a random number of digits for the one-time password, either 6 or 8
-      let digitCount: Int = Bool.random() ? 6 : 8
-      // Choose a random generator type, either TOTP or HOTP with an initial counter value of 1
-      let generatorType: GeneratorType = Bool.random() ? .totp : .htop(1)
-      // Create a new one-time password using the generated secret key, time period, hash algorithm, and number of digits
-      guard let otp: OTP = try? .init(
-         secret: secret, // The secret key used to generate the one-time password
-         period: period, // The time period for the one-time password
-         digits: digitCount, // The number of digits in the one-time password
-         algo: algoType // The hash algorithm to use for the one-time password
-      ) else {
-         // Logger.warn("\(Trace.trace()) no otp", tag: .security) // Log a warning if the one-time password cannot be generated
-         return nil
-      }
-      // Create a new OTP account with the generated name, issuer, image URL, one-time password, and generator type
-      let otpAccount: OTPAccount = .init(
-         name: name, // The name of the account for which the one-time password is being generated
-         issuer: issuer, // The issuer of the account for which the one-time password is being generated
-         imageURL: nil, // The URL of an image associated with the account (optional)
-         otp: otp, // The secret key used to generate the one-time password
-         generatorType: generatorType // The type of one-time password generator to use
-      )
-      // Return the new OTP account
-      return otpAccount
+       // Generate a random secret key between 8 and 16 bytes long
+       guard let secret = randomSecret(min: 8, max: 16) else {
+           return nil // Return nil if the secret key cannot be generated
+       }
+       
+       // Generate random OTP parameters
+       let period = [30.0, 60.0].randomElement()!
+       let algoType = [Algorithm.sha1, .sha256, .sha512].randomElement()!
+       let digitCount = [6, 8].randomElement()!
+       let generatorType: GeneratorType = Bool.random() ? .totp : .htop(1)
+       
+       // Create a new one-time password using the generated parameters
+       guard let otp = try? OTP(
+           secret: secret, // The secret key used to generate the one-time password
+           period: period, // The time period for the one-time password
+           digits: digitCount, // The number of digits in the one-time password
+           algo: algoType // The hash algorithm to use for the one-time password
+       ) else {
+           return nil // Return nil if the OTP cannot be generated
+       }
+       
+       // Create and return a new OTP account
+       return OTPAccount(
+           name: name, // The name of the account
+           issuer: issuer, // The issuer of the account
+           imageURL: nil, // The URL of an image associated with the account (optional)
+           otp: otp, // The one-time password
+           generatorType: generatorType // The type of one-time password generator to use
+       )
    }
 }
 /**
@@ -129,22 +130,12 @@ extension RandomOTP {
     * - Returns: A `Data` object containing the generated secret key, or `nil` if the key cannot be generated.
     */
    fileprivate static func randomSecret(length: Int) -> Data? {
-      let symKeySalt = SymmetricKey(size: .bits256) // Create a new symmetric key with a size of 256 bits (32 bytes)
-      let salt: Data = symKeySalt.withUnsafeBytes { Data($0) } // Convert the symmetric key to a Data object
-      let secret: String = salt.base64EncodedString() // Encode the Data object as a base64 string
-      let range: String = { // Limit the secret to the desired length
-         // Get the start index of the secret string
-         let start: String.Index = secret.index(secret.startIndex, offsetBy: 0)
-         // Get the end index of the secret string
-         let end: String.Index = secret.index(secret.startIndex, offsetBy: length)
-         // Return the substring of the secret string between the start and end indices
-         return String(secret[start..<end])
-      }()
-      // Convert the substring to a base64-encoded Data object and encode it as a string
-      let base64Range: String = Data(range.utf8).base64EncodedString()
-      // Convert the base64-encoded string to a Data object
-      let data: Data? = .init(base64Encoded: base64Range)
-      return data // Return the generated secret key as a Data object
+      // Create a new symmetric key with the specified length in bits
+      // Since 'length' is in bytes, we multiply by 8 to get bits
+      let symKey = SymmetricKey(size: .init(bitCount: length * 8))
+      // Convert the symmetric key to a Data object
+      let secretData = symKey.withUnsafeBytes { Data($0) }
+      return secretData // Return the generated secret key as a Data object
    }
 }
 #endif

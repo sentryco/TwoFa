@@ -42,13 +42,10 @@ internal class OTPAccIniter {
     * - Returns: The query items from the URL
     */
    static func getQueryItems(url: URL) throws -> [URLQueryItem] {
-      // Initialize URLComponents with the given URL, without resolving against a base URL.
-      guard let queryComponents = URLComponents(url: url, resolvingAgainstBaseURL: false),
-            // Retrieve the query items from the URLComponents.
-            let queryItems = queryComponents.queryItems,
-            // Ensure that the query items array is not empty.
+      // Retrieve the query items from the URLComponents.
+      guard let queryItems = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems,
             !queryItems.isEmpty else {
-         throw OTPError.invalidURL(reason: "incorrect URL components")
+         throw OTPError.invalidURL(reason: "No query items found in URL")
       }
       return queryItems
    }
@@ -66,9 +63,14 @@ internal class OTPAccIniter {
     * - Returns: The label components from the URL
     */
    static func getLabelComponents(url: URL) -> [String] {
-      // Extract the path from the URL, remove leading and trailing slashes, and split it into components separated by colons.
+      // Extract the path from the URL
+      let path = url.path
+      // Remove leading and trailing slashes
+      let trimmedPath = path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+      // Split the path into components separated by colons
+      let components = trimmedPath.components(separatedBy: ":")
       // This is used to parse the label components of the OTP URL, which may include the issuer and account name.
-      url.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")).components(separatedBy: ":")
+      return components
    }
 
    /**

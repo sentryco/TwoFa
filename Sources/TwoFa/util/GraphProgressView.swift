@@ -151,17 +151,18 @@ extension GraphProgressView {
     * - Remark: This method returns the current color of the graph based on the progress and threshold values.
     */
    public var color: OSColor { // Style
-      if progress < threshold {
-         // Return the start color if the progress is less than the threshold
-         return tintColors.start
-      }
-      else if progress > 1 - threshold {
-          // Return the end color if the progress is greater than 1 minus the threshold
-         return tintColors.end
-      } else {
-         // Return the idle color if the progress is between the threshold and 1 minus the threshold
-         return tintColors.idle
-      }
+       // Determine the color based on the progress and threshold
+       switch progress {
+       case ..<threshold:
+           // Return the start color if the progress is less than the threshold
+           return tintColors.start
+       case (1 - threshold)...:
+           // Return the end color if the progress is greater than 1 minus the threshold
+           return tintColors.end
+       default:
+           // Return the idle color if the progress is between the threshold and 1 minus the threshold
+           return tintColors.idle
+       }
    }
    /**
     * Draw graphic
