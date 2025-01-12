@@ -29,6 +29,9 @@ final class TwoFaTests: XCTestCase {
       }
    }
 }
+/**
+ * Private
+ */
 extension TwoFaTests {
    /**
     * HTOP URL test (Deocde and assert)
