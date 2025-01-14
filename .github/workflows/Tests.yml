@@ -8,6 +8,8 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily at 00:00 UTC
 
 jobs:
   build:
@@ -15,6 +17,12 @@ jobs:
     runs-on: macos-latest
 
     steps:
+    - name: Sleep for a random time
+      shell: bash
+      run: |
+        RANDOM_NUMBER=$(( (RANDOM * 32768 + RANDOM) % 86400 ))
+        echo "Sleeping for $RANDOM_NUMBER seconds"
+        sleep $RANDOM_NUMBER
     - uses: actions/checkout@v4
     - name: Build
       run: swift build -v
