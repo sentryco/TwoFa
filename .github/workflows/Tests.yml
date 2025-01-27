@@ -13,14 +13,12 @@ on:
 
 jobs:
   build:
-
     runs-on: macos-latest
-
     steps:
-    - name: Sleep for a random time
+    - name: Sleep for a random time (up to 15 minutes)
       shell: bash
       run: |
-        RANDOM_NUMBER=$(( (RANDOM * 32768 + RANDOM) % 86400 ))
+        RANDOM_NUMBER=$(( RANDOM % 900 ))  # Random number between 0 and 899 seconds
         echo "Sleeping for $RANDOM_NUMBER seconds"
         sleep $RANDOM_NUMBER
     - uses: actions/checkout@v4
